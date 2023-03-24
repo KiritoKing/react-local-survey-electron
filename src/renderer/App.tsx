@@ -1,40 +1,44 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
-import './App.css';
+import 'survey-core/defaultV2.min.css';
+import { Model } from 'survey-core';
+import { Survey } from 'survey-react-ui';
+import { useCallback } from 'react';
 
-function Hello() {
+const surveyJson = {
+  elements: [
+    {
+      name: 'FirstName',
+      title: 'Enter your first name:',
+      type: 'text',
+    },
+    {
+      name: 'LastName',
+      title: 'Enter your last name:',
+      type: 'text',
+    },
+  ],
+};
+
+function Questionaire() {
+  const survey = new Model(surveyJson);
+  const alertResult = useCallback((sender: Model) => {
+    const result = JSON.stringify(sender.data);
+    console.log(result);
+  }, []);
+  survey.onComplete.add(alertResult);
+
+  const setTitle = useCallback(async () => {
+    const filePath = await window.electron.importFile();
+    window.electron.setTitle(filePath);
+  }, []);
+
   return (
     <div>
-      <div className="Hello">
-        <img width="200" alt="icon" src={icon} />
-      </div>
-      <h1>electron-react-boilerplate</h1>
-      <div className="Hello">
-        <a
-          href="https://electron-react-boilerplate.js.org/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              📚
-            </span>
-            Read our docs
-          </button>
-        </a>
-        <a
-          href="https://github.com/sponsors/electron-react-boilerplate"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="folded hands">
-              🙏
-            </span>
-            Donate
-          </button>
-        </a>
-      </div>
+      <h1>Questionaire</h1>
+      <button type="button" onClick={setTitle}>
+        Set Title
+      </button>
+      <Survey model={survey} />
     </div>
   );
 }
@@ -43,7 +47,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Hello />} />
+        <Route path="/" element={<Questionaire />} />
       </Routes>
     </Router>
   );

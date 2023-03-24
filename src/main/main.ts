@@ -1,40 +1,12 @@
-/* eslint global-require: off, no-console: off, promise/always-return: off */
+/* eslint-disable no-console */
+/* eslint-disable global-require */
 
-/**
- * This module executes inside of electron's main process. You can start
- * electron renderer process from here and communicate with the other processes
- * through IPC.
- *
- * When running `npm run build` or `npm run build:main`, this file is compiled to
- * `./src/main.js` using webpack. This gives us some performance wins.
- */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
-import { autoUpdater } from 'electron-updater';
-import log from 'electron-log';
+import { app, BrowserWindow, dialog, ipcMain } from 'electron';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 
-class AppUpdater {
-  constructor() {
-    log.transports.file.level = 'info';
-    autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
-  }
-}
-
 let mainWindow: BrowserWindow | null = null;
-
-ipcMain.on('ipc-example', async (event, arg) => {
-  const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
-  console.log(msgTemplate(arg));
-  event.reply('ipc-example', msgTemplate('pong'));
-});
-
-if (process.env.NODE_ENV === 'production') {
-  const sourceMapSupport = require('source-map-support');
-  sourceMapSupport.install();
-}
 
 const isDebug =
   process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
@@ -102,14 +74,14 @@ const createWindow = async () => {
   menuBuilder.buildMenu();
 
   // Open urls in the user's browser
-  mainWindow.webContents.setWindowOpenHandler((edata) => {
-    shell.openExternal(edata.url);
-    return { action: 'deny' };
-  });
+  // mainWindow.webContents.setWindowOpenHandler((edata) => {
+  //   shell.openExternal(edata.url);
+  //   return { action: 'deny' };
+  // });
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
-  new AppUpdater();
+  // new AppUpdater();
 };
 
 /**
@@ -126,6 +98,7 @@ app.on('window-all-closed', () => {
 
 app
   .whenReady()
+  // eslint-disable-next-line promise/always-return
   .then(() => {
     createWindow();
     app.on('activate', () => {
@@ -133,5 +106,28 @@ app
       // dock icon is clicked and there are no other windows open.
       if (mainWindow === null) createWindow();
     });
+
+    // 注册IPC通信事件
+    ipcMain.on('set-title', async (event, args) => {
+      mainWindow?.setTitle(args[0]);
+      console.log(mainWindow?.webContents);
+    });
+    ipcMain.handle('import-file', async (event, args) => {
+      if (mainWindow == null) return null;
+      const { canceled, filePaths } = await dialog.showOpenDialog(
+        mainWindow,
+        {}
+      );
+      if (!canceled) {
+        return filePaths[0];
+      }
+      return null;
+    });
+
+    // eslint-disable-next-line promise/always-return
+    if (process.env.NODE_ENV === 'production') {
+      const sourceMapSupport = require('source-map-support');
+      sourceMapSupport.install();
+    }
   })
   .catch(console.log);
