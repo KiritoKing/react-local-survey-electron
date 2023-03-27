@@ -1,27 +1,18 @@
 /* eslint-disable no-console */
-import React, { useState } from 'react';
+import { ISurveyCache } from 'main/typing';
+import React, { useContext } from 'react';
+// eslint-disable-next-line import/no-cycle
+import { SurveyListContext } from 'renderer/App';
+import SurveyList from 'renderer/Components/SurveyList';
 
 function Home() {
-  const [jsonNum, setJsonNum] = useState(0);
-  const update = () => {
-    window.electron
-      .openFolder()
-      .then((res) => {
-        setJsonNum(res.length);
-        // eslint-disable-next-line no-restricted-syntax
-        for (const item of res) {
-          console.log(item.name);
-        }
-        return res;
-      })
-      .catch(console.log);
-  };
+  const dataContext = useContext(SurveyListContext) as any;
+  const surveyCache = dataContext.data as ISurveyCache[];
   return (
     <div>
-      <h1>Home {jsonNum}</h1>
-      <button type="button" onClick={update}>
-        1
-      </button>
+      <div>
+        <SurveyList data={surveyCache} />
+      </div>
     </div>
   );
 }

@@ -3,6 +3,7 @@ module.exports = {
   rules: {
     // A temporary hack related to IDE not resolving correct package.json
     'import/no-extraneous-dependencies': 'off',
+    "import/no-cycle": process.env.NODE_ENV === 'production' ? 'warn' : 'off'
     'react/react-in-jsx-scope': 'off',
     'react/jsx-filename-extension': 'off',
     'import/extensions': 'off',

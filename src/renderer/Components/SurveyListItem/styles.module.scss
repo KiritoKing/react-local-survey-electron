@@ -1,0 +1,38 @@
+.wrapper {
+  position: relative;
+}
+
+.survey-card {
+  position: relative;
+  padding: 1rem;
+  border-radius: 0.4rem;
+  background-color: #fff;
+  transition: all 0.1s;
+  min-height: 6rem;
+  cursor: pointer;
+  &:hover {
+    transform: translateY(-0.1rem);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+  }
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 5px; /* 设置线条的宽度 */
+    background-color: #13c29f; /* 设置线条的颜色 */
+  }
+}
+
+.more-popout {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}

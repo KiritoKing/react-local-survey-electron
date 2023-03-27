@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { IpcMainInvokeEvent } from 'electron';
 import { existsSync, mkdirSync, readdirSync, readFileSync } from 'fs';
 import { ISurvey } from 'main/typing';
@@ -19,7 +20,7 @@ async function openFolderHandler(_event: IpcMainInvokeEvent, _args: any) {
   const jsonFiles = files.filter((file) => path.extname(file) === '.json');
   console.log(jsonFiles.length);
 
-  const results: Array<ISurvey> = [];
+  const results = [];
   // eslint-disable-next-line no-unreachable-loop
   for (let i = 0; i < jsonFiles.length; i += 1) {
     const filePath = path.join(surveysPath, jsonFiles[i]);
@@ -27,7 +28,7 @@ async function openFolderHandler(_event: IpcMainInvokeEvent, _args: any) {
     const survey = JSON.parse(data) as ISurvey;
 
     if (survey?.id && survey?.name && survey?.data) {
-      results.push(survey);
+      results.push({ ...survey, path: filePath });
     }
   }
   if (results.length === 0) return null;
