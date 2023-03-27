@@ -6,21 +6,19 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Box from '@mui/material/Box';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { SurveyListContext } from 'renderer/App';
 import TopIconButton from './TopIconButton';
 import styles from './styles.module.scss';
 
 function HeadBar() {
   const nav = useNavigate();
+  const loc = useLocation();
   const dataContext = useContext(SurveyListContext) as any;
   const handleRefresh = dataContext.refreshHandler as () => void;
 
   const handleBack = () => {
     nav(-1);
-  };
-  const handleForward = () => {
-    nav(1);
   };
 
   return (
@@ -28,11 +26,11 @@ function HeadBar() {
       <AppBar position="fixed">
         <Toolbar sx={{ display: 'flex' }}>
           <Box sx={{ flex: 1 }}>
-            <TopIconButton onClick={handleBack}>
+            <TopIconButton
+              onClick={handleBack}
+              disabled={loc.key === 'default'}
+            >
               <ArrowBackIosNewIcon />
-            </TopIconButton>
-            <TopIconButton onClick={handleForward}>
-              <ArrowForwardIosIcon />
             </TopIconButton>
           </Box>
           <TopIconButton onClick={handleRefresh}>

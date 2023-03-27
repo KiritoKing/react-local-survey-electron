@@ -1,0 +1,43 @@
+{
+  "name": "中文问卷测试",
+  "id": "a5cc56d0-4057-421b-a960-02630e040a23",
+  "lastModified": "2023-03-27 17:34:31",
+  "creator": "KiritoKing",
+  "data": {
+    "pages": [
+      {
+        "name": "个人信息",
+        "elements": [
+          {
+            "type": "text",
+            "name": "name",
+            "title": "姓名："
+          },
+          {
+            "type": "panel",
+            "name": "contacts",
+            "state": "collapsed",
+            "title": "联系方式（可选）",
+            "elements": [
+              {
+                "type": "text",
+                "name": "QQ",
+                "title": "QQ号:"
+              },
+              {
+                "type": "text",
+                "name": "wechat",
+                "title": "微信号:"
+              },
+              {
+                "type": "text",
+                "name": "email",
+                "title": "电子邮箱地址:"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

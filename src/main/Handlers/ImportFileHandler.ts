@@ -4,6 +4,22 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import { getBrowserWindow, getNameFromPath } from '../util';
 
+export function readSingleSurveyFile(path: string) {
+  try {
+    const data = readFileSync(path, 'utf-8');
+    const survey = JSON.parse(data);
+
+    return {
+      name: getNameFromPath(path),
+      data: survey,
+    };
+  } catch (e) {
+    console.error('JSON format error!');
+    console.log(e);
+    return null;
+  }
+}
+
 // eslint-disable-next-line no-unused-vars
 async function importFileHandler(event: IpcMainInvokeEvent, _args: any) {
   const window = getBrowserWindow(event);
@@ -20,18 +36,7 @@ async function importFileHandler(event: IpcMainInvokeEvent, _args: any) {
   });
 
   if (!canceled) {
-    try {
-      const data = readFileSync(filePaths[0], 'utf-8');
-      const survey = JSON.parse(data);
-
-      return {
-        name: getNameFromPath(filePaths[0]),
-        data: survey,
-      };
-    } catch (e) {
-      console.error('JSON format error!');
-      console.log(e);
-    }
+    return readSingleSurveyFile(filePaths[0]);
   }
   return null;
 }

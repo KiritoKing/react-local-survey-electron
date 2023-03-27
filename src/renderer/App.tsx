@@ -11,8 +11,10 @@ import React, {
 } from 'react';
 import { RouterProvider, createHashRouter } from 'react-router-dom';
 import PageFrame from './Components/PageFrame';
+import CompletePage from './Pages/Completion';
 import Creator from './Pages/Creator';
 import Home from './Pages/Home';
+import SurveyPage from './Pages/Survey';
 
 const theme = createTheme({
   palette: {
@@ -35,6 +37,14 @@ const router = createHashRouter([
         path: '/creator',
         element: <Creator />,
       },
+      {
+        path: '/survey/:surveyId',
+        element: <SurveyPage />,
+      },
+      {
+        path: '/complete',
+        element: <CompletePage />,
+      },
     ],
   },
 ]);
@@ -48,6 +58,7 @@ export default function App() {
     window.electron
       .openFolder()
       .then((res: any) => {
+        if (res === null) return;
         // 注意这里res其实是 ISurvey + Path 的结合对象
         setSurveyCache(res);
         window.localStorage.setItem('surveyCache', JSON.stringify(res));

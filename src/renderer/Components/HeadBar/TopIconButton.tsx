@@ -5,10 +5,13 @@ import IconButton from '@mui/material/IconButton';
 interface IProps {
   children?: React.ReactNode;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 // eslint-disable-next-line react/function-component-definition
-const TopIconButton: React.FC<IProps> = ({ children, ...props }) => {
+const TopIconButton: React.FC<IProps> = (
+  { children, ...props } = { disabled: false }
+) => {
   return (
     <IconButton
       size="large"

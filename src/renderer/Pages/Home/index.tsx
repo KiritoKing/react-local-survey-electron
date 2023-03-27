@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import { ISurveyCache } from 'main/typing';
 import React, { useContext } from 'react';
-// eslint-disable-next-line import/no-cycle
 import { SurveyListContext } from 'renderer/App';
 import SurveyList from 'renderer/Components/SurveyList';
 

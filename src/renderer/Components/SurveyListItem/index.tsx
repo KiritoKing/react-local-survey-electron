@@ -1,9 +1,10 @@
 import { ISurveyCache } from 'main/typing';
-import { Paper, Typography, IconButton } from '@mui/material';
+import { Paper, Typography, IconButton, Box } from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import React from 'react';
 import styles from './styles.module.scss';
 import SurveyListItemMenu from '../SurveyListItemMenu';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 interface IProps {
   data: ISurveyCache;
@@ -22,7 +23,7 @@ const SurveyListItem: React.FC<IProps> = ({ data, onClick }) => {
     setAnchorEl(null);
   };
   return (
-    <div className={styles.wrapper} onClick={onClick} aria-hidden>
+    <div className={styles.wrapper} aria-hidden>
       <Paper
         className={styles['survey-card']}
         elevation={3}
@@ -45,14 +46,24 @@ const SurveyListItem: React.FC<IProps> = ({ data, onClick }) => {
             创建时间: {data?.lastModified ? data.lastModified : '未知'}
           </Typography>
         </div>
-
-        <IconButton
-          onClick={handleOpenMenu}
-          className={styles['more-popout']}
-          aria-label="more"
+        <Box
+          sx={{
+            position: 'absolute',
+            right: '10px',
+            top: '10px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-around',
+            pb: '1rem',
+          }}
         >
-          <MoreHorizIcon />
-        </IconButton>
+          <IconButton onClick={handleOpenMenu} aria-label="more">
+            <MoreHorizIcon />
+          </IconButton>
+          <IconButton sx={{ mt: '1rem' }} onClick={onClick} aria-label="open">
+            <ArrowForwardIosIcon fontSize="small" />
+          </IconButton>
+        </Box>
         <SurveyListItemMenu
           anchorEl={anchorEl}
           open={open}
