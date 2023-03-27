@@ -1,5 +1,7 @@
 .wrapper {
   position: relative;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .survey-card {
