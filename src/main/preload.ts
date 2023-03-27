@@ -2,7 +2,11 @@
 /* eslint no-unused-vars: off */
 import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
 
-export type Channels = 'set-title' | 'open-folder' | 'import-file';
+export type Channels =
+  | 'set-survey-name'
+  | 'open-folder'
+  | 'import-file'
+  | 'get_title';
 
 const electronHandler = {
   ipcRenderer: {
@@ -22,8 +26,11 @@ const electronHandler = {
       ipcRenderer.once(channel, (_event, ...args) => func(...args));
     },
   },
-  setTitle: (title: string) => ipcRenderer.send('set-title', [title]),
+  setSurveyName: (title: string) =>
+    ipcRenderer.send('set-survey-name', [title]),
+  getTitle: () => ipcRenderer.invoke('get-title'),
   importFile: async () => ipcRenderer.invoke('import-file'),
+  openFolder: async () => ipcRenderer.invoke('open-folder'),
 };
 
 contextBridge.exposeInMainWorld('electron', electronHandler);
