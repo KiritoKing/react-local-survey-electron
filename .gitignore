@@ -19,7 +19,8 @@ node_modules
 .DS_Store
 
 # App Storage
-workspace
+# workspace
+workspace/config.json
 
 release/app/dist
 release/build
