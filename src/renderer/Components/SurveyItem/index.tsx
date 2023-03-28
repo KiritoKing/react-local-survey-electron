@@ -9,9 +9,9 @@ import SurveyListItemMenu from '../SurveyItemMenu';
 interface IProps {
   data: ISurveyCache;
   // eslint-disable-next-line react/require-default-props
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  onDelete?: React.MouseEventHandler<HTMLButtonElement>;
-  onEdit?: React.MouseEventHandler<HTMLButtonElement>;
+  onClick?: () => void;
+  onDelete?: () => void;
+  onEdit?: () => void;
 }
 
 // eslint-disable-next-line react/function-component-definition
@@ -75,12 +75,12 @@ const SurveyListItem: React.FC<IProps> = ({
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
-          onDelete={(e) => {
-            onDelete && onDelete(e);
+          onDelete={() => {
+            onDelete && onDelete();
             handleClose();
           }}
-          onEdit={(e) => {
-            onEdit && onEdit(e);
+          onEdit={() => {
+            onEdit && onEdit();
             handleClose();
           }}
           anchorOrigin={{
