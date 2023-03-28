@@ -2,18 +2,25 @@ import { ISurveyCache } from 'main/typing';
 import { Paper, Typography, IconButton, Box } from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import React from 'react';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import styles from './styles.module.scss';
 import SurveyListItemMenu from '../SurveyListItemMenu';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 interface IProps {
   data: ISurveyCache;
   // eslint-disable-next-line react/require-default-props
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onDelete?: React.MouseEventHandler<HTMLButtonElement>;
+  onEdit?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 // eslint-disable-next-line react/function-component-definition
-const SurveyListItem: React.FC<IProps> = ({ data, onClick }) => {
+const SurveyListItem: React.FC<IProps> = ({
+  data,
+  onClick,
+  onDelete,
+  onEdit,
+}) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -68,6 +75,14 @@ const SurveyListItem: React.FC<IProps> = ({ data, onClick }) => {
           anchorEl={anchorEl}
           open={open}
           onClose={handleClose}
+          onDelete={(e) => {
+            onDelete && onDelete(e);
+            handleClose();
+          }}
+          onEdit={(e) => {
+            onEdit && onEdit(e);
+            handleClose();
+          }}
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'right',

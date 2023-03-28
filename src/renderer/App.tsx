@@ -72,14 +72,17 @@ const router = createHashRouter([
   },
 ]);
 
-export const SurveyListContext = createContext<unknown>(null);
+export const SurveyListContext = createContext<{
+  data: ISurveyCache[] | undefined;
+  refreshHandler: () => void;
+}>(undefined as any);
 
 export default function App() {
   const [surveyCache, setSurveyCache] = useState<ISurveyCache[]>();
   const updateFromFiles = useCallback(() => {
     console.log('Read from file');
-    window.electron
-      .openFolder()
+    window.electron.ipcRenderer
+      .invoke('open-folder')
       .then((res: any) => {
         // eslint-disable-next-line promise/always-return
         if (res !== null) {

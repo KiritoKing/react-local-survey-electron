@@ -18,7 +18,7 @@ const PageFrame: React.FC = () => {
         <SwitchTransition>
           <CSSTransition
             key={loc.pathname}
-            timeout={500}
+            timeout={300}
             classNames="fade"
             nodeRef={nodeRef}
             unmountOnExit

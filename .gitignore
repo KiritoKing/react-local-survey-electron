@@ -21,6 +21,7 @@ node_modules
 # App Storage
 # workspace
 workspace/config.json
+workspace/results
 
 release/app/dist
 release/build

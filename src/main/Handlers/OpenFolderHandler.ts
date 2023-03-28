@@ -1,8 +1,8 @@
 /* eslint-disable no-console */
 import { IpcMainInvokeEvent } from 'electron';
 import { existsSync, mkdirSync, readdirSync, readFileSync } from 'fs';
-import { ISurvey } from 'main/typing';
 import path from 'path';
+import { ISurvey } from '../typing';
 import { getConfig } from '../util';
 
 // eslint-disable-next-line no-unused-vars

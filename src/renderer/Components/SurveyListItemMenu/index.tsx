@@ -7,8 +7,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 interface IProps extends MenuProps {
-  onEdit?: () => void;
-  onDelete?: () => void;
+  onEdit?: any;
+  onDelete?: any;
 }
 
 // eslint-disable-next-line react/function-component-definition

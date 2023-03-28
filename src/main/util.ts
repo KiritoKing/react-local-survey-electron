@@ -47,3 +47,19 @@ export function getConfig(): IConfig {
 
   return JSON.parse(readFileSync(configPath, 'utf-8'));
 }
+
+export function readSingleSurveyFile(filePath: string) {
+  try {
+    const data = readFileSync(filePath, 'utf-8');
+    const survey = JSON.parse(data);
+
+    return {
+      name: getNameFromPath(filePath),
+      data: survey,
+    };
+  } catch (e) {
+    console.error('JSON format error!');
+    console.log(e);
+    return null;
+  }
+}

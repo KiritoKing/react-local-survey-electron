@@ -3,9 +3,10 @@
 
 import path from 'path';
 import { app, BrowserWindow, ipcMain, Menu } from 'electron';
-import { getBrowserWindow, resolveHtmlPath } from './util';
+import { resolveHtmlPath } from './util';
 import importFileHandler from './Handlers/ImportFileHandler';
 import openFolderHandler from './Handlers/OpenFolderHandler';
+import saveResultHandler from './Handlers/SaveResultHandler';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -91,18 +92,10 @@ app
       if (mainWindow === null) createWindow();
     });
 
-    const initTitle = '问卷调查系统';
     // 注册IPC通信事件
-    ipcMain.on('set-survey-name', (event, args) => {
-      if (args[0])
-        getBrowserWindow(event)?.setTitle(`${initTitle} - ${args[0]}`);
-    });
     ipcMain.handle('import-file', importFileHandler);
-    // eslint-disable-next-line no-unused-vars
-    ipcMain.handle('get-title', (event, _args) =>
-      getBrowserWindow(event)?.getTitle()
-    );
     ipcMain.handle('open-folder', openFolderHandler);
+    ipcMain.on('save-result', saveResultHandler);
 
     // eslint-disable-next-line promise/always-return
     if (process.env.NODE_ENV === 'production') {

@@ -26,6 +26,15 @@ const SurveyList: React.FC<IProps> = ({ data, onFail }) => {
     );
     nav(`/survey/${survey.id}`);
   };
+
+  const handleDeleteSurvey = (survey: ISurveyCache) => {
+    console.log(`Delete: ${survey.id}`);
+  };
+
+  const handleEditSurvey = (survey: ISurveyCache) => {
+    console.log(`Edit: ${survey.id}`);
+  };
+
   return (
     <Grid container spacing={2} className={styles['survey-list']}>
       {data &&
@@ -33,9 +42,12 @@ const SurveyList: React.FC<IProps> = ({ data, onFail }) => {
           return (
             <Grid item xs={6} md={4} key={item.id}>
               <SurveyListItem
-                onClick={() => {
+                onClick={(e) => {
                   handleClickSurvey(item);
+                  e.stopPropagation();
                 }}
+                onEdit={() => handleEditSurvey(item)}
+                onDelete={() => handleDeleteSurvey(item)}
                 data={item}
               />
             </Grid>

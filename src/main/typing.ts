@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+import { IpcMainInvokeEvent, IpcMainEvent } from 'electron';
+
 export interface ISurvey {
   id: string;
   name: string;
@@ -20,4 +23,16 @@ export interface IConfig {
   workFolder: string;
   needPassword: boolean;
   password?: string;
+}
+
+export interface ipcHanlder {
+  (event: IpcMainInvokeEvent | IpcMainEvent, args: any): Promise<any> | void;
+}
+
+export interface IResult {
+  id: string;
+  surveyId: string;
+  contestant?: string;
+  time: number; // UNIX时间戳
+  data: any;
 }
