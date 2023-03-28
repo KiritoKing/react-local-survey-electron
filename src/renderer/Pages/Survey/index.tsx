@@ -15,6 +15,7 @@ const saveResult = (surveyId: string, data: any, contestant?: string) => {
     surveyId,
     contestant,
     time: dayjs().valueOf(),
+    valid: true,
     data,
   };
   window.electron.ipcRenderer.sendMessage('save-result', [toSave]);
@@ -28,7 +29,7 @@ const SurveyPage = () => {
   const model = new Model(survey!.data);
   const handleComplete = useCallback((sender: any) => {
     console.log(sender.data);
-    saveResult(surveyId!, sender.data, 'me');
+    saveResult(surveyId!, sender.data, sender.data.name);
     nav('/complete');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

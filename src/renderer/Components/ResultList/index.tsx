@@ -9,7 +9,6 @@ interface IProps {
 
 const ResultList: React.FC<IProps> = ({ data }) => {
   const itemTemplate = (item: IResultCache) => {
-    console.log('Templating');
     return <ResultItem data={item} />;
   };
   return <ItemList itemSource={data} template={itemTemplate} />;

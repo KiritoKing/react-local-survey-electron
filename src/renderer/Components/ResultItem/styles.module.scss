@@ -1,4 +1,17 @@
 .result-card {
   position: relative;
-  padding: 1rem;
+  display: flex;
+  flex-direction: row !important;
+  padding: 0.5rem;
+}
+
+.left-panel {
+  flex: 1;
+}
+
+.right-panel {
+  margin-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -75,9 +75,7 @@ export function insertToCache(result: IResult) {
   const cache = readFileSync(cachePath, 'utf-8');
   const cacheObject = JSON.parse(cache) as IResultCache[];
   cacheObject.push({
-    id: result.id,
-    time: result.time,
-    contestant: result.contestant,
+    ...result,
   });
   writeFileSync(cachePath, JSON.stringify(cacheObject));
 }

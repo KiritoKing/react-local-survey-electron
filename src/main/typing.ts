@@ -33,6 +33,7 @@ export interface IResult {
   id: string;
   surveyId: string;
   contestant?: string;
+  valid: boolean;
   time: number; // UNIX时间戳
   data: any;
 }
@@ -41,4 +42,5 @@ export interface IResultCache {
   id: string;
   contestant?: string;
   time: number;
+  valid: boolean;
 }
