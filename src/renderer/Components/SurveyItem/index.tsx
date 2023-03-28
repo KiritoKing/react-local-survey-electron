@@ -3,6 +3,7 @@ import { Paper, Typography, IconButton, Box } from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import React from 'react';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { useNavigate } from 'react-router-dom';
 import styles from './styles.module.scss';
 import SurveyListItemMenu from '../SurveyItemMenu';
 
@@ -23,11 +24,16 @@ const SurveyListItem: React.FC<IProps> = ({
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const nav = useNavigate();
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+  };
+  const handleViewResults = () => {
+    handleClose();
+    nav(`/results/${data.id}`);
   };
   return (
     <div className={styles.wrapper} aria-hidden>
@@ -76,13 +82,14 @@ const SurveyListItem: React.FC<IProps> = ({
           open={open}
           onClose={handleClose}
           onDelete={() => {
-            onDelete && onDelete();
             handleClose();
+            onDelete && onDelete();
           }}
           onEdit={() => {
-            onEdit && onEdit();
             handleClose();
+            onEdit && onEdit();
           }}
+          onViewResults={handleViewResults}
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'right',

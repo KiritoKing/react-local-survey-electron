@@ -11,13 +11,11 @@ const ItemList: React.FC<{
   return (
     <Grid container spacing={2} sx={{ padding: '1rem' }}>
       {children}
-      {template
-        ? itemSource?.map((item) => (
-            <Grid item xs={6} md={4} key={item.id ?? uuid()}>
-              {template(item)}
-            </Grid>
-          ))
-        : itemSource}
+      {itemSource?.map((item) => (
+        <Grid item xs={6} md={4} key={item.id ?? uuid()}>
+          {template ? template(item) : JSON.stringify(item) ?? item.toString()}
+        </Grid>
+      ))}
     </Grid>
   );
 };

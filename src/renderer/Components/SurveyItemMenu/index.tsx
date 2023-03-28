@@ -10,12 +10,14 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 interface IProps extends MenuProps {
   onEdit?: any;
   onDelete?: any;
+  onViewResults?: any;
 }
 
 // eslint-disable-next-line react/function-component-definition
 const SurveyListItemMenu: React.FC<IProps> = ({
   onEdit,
   onDelete,
+  onViewResults,
   ...props
 }) => {
   return (
@@ -29,7 +31,7 @@ const SurveyListItemMenu: React.FC<IProps> = ({
         <DeleteIcon fontSize="small" />
         <ListItemText sx={{ ml: 1, color: '#454c4f' }}>删除</ListItemText>
       </MenuItem>
-      <MenuItem>
+      <MenuItem onClick={onViewResults}>
         <AssignmentTurnedInIcon fontSize="small" />
         <ListItemText sx={{ ml: 1, color: '#454c4f' }}>管理结果</ListItemText>
       </MenuItem>

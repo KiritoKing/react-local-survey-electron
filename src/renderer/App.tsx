@@ -15,6 +15,7 @@ import PageFrame from './Components/PageFrame';
 import CompletePage from './Pages/Completion';
 import Creator from './Pages/Creator';
 import Home from './Pages/Home';
+import ResultPage from './Pages/Results';
 import SurveyPage from './Pages/Survey';
 import './Styles/App.css';
 
@@ -56,6 +57,12 @@ export const routes: IRoute[] = [
     path: '/complete',
     element: <CompletePage />,
     name: 'Complete',
+    nodeRef: createRef(),
+  },
+  {
+    path: '/results/:surveyId',
+    element: <ResultPage />,
+    name: 'Results',
     nodeRef: createRef(),
   },
 ];
