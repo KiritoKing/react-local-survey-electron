@@ -1,16 +1,28 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import CheckIcon from '@mui/icons-material/Check';
 import Typography from '@mui/material/Typography';
 import styles from './styles.module.scss';
 
 const CompletePage = () => {
+  const waitTime = 3;
+
   const nav = useNavigate();
-  const [navTime, setNavTime] = useState(3);
+  const [navTime, setNavTime] = useState(waitTime);
+  const timerId = useRef<number | null>(null);
+  const interId = useRef<number | null>(null);
+
   useEffect(() => {
-    setTimeout(() => setNavTime(2), 1000);
-    setTimeout(() => setNavTime(1), 2000);
-    setTimeout(() => nav('/'), 3000);
+    interId.current = window.setInterval(
+      () => setNavTime((prev) => prev - 1),
+      1000
+    );
+    timerId.current = window.setTimeout(() => nav('/'), waitTime * 1000);
+    return () => {
+      console.log('Clear timers');
+      window.clearTimeout(timerId.current as any);
+      window.clearInterval(interId.current as any);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -6,7 +6,9 @@ export type Channels =
   | 'open-folder'
   | 'import-file'
   | 'save-result'
-  | 'get-result';
+  | 'get-result'
+  | 'export-result'
+  | 'clear-result';
 
 const electronHandler = {
   ipcRenderer: {

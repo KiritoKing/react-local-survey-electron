@@ -8,6 +8,8 @@ import importFileHandler from './Handlers/ImportFileHandler';
 import openFolderHandler from './Handlers/OpenFolderHandler';
 import saveResultHandler from './Handlers/SaveResultHandler';
 import getResultHandler from './Handlers/GetResultHandler';
+import exportResultHandler from './Handlers/ExportResultHandler';
+import clearResultHandler from './Handlers/ClearResultHandler';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -98,6 +100,8 @@ app
     ipcMain.handle('open-folder', openFolderHandler);
     ipcMain.on('save-result', saveResultHandler);
     ipcMain.handle('get-result', getResultHandler);
+    ipcMain.on('export-result', exportResultHandler);
+    ipcMain.on('clear-result', clearResultHandler);
 
     // eslint-disable-next-line promise/always-return
     if (process.env.NODE_ENV === 'production') {

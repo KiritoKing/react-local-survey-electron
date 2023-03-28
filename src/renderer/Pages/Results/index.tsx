@@ -2,17 +2,20 @@ import { Button } from '@mui/material';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import CircularProgress from '@mui/material/CircularProgress';
 import { IResultCache } from 'main/typing';
-import React, { useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ResultList from 'renderer/Components/ResultList';
+import { SurveyListContext } from 'renderer/App';
 import styles from './styles.module.scss';
 
 const ResultPage = () => {
   const { surveyId } = useParams();
+  const surveys = useContext(SurveyListContext).data;
   const [data, setData] = React.useState<IResultCache[]>([]);
 
-  useEffect(() => {
+  const handleRefresh = useCallback(() => {
     window.electron.ipcRenderer
       .invoke('get-result', surveyId)
       .then((res) => {
@@ -22,10 +25,26 @@ const ResultPage = () => {
       .catch(console.log);
   }, [surveyId]);
 
+  const handleExport = () => {
+    const name =
+      surveys?.find((item) => item.id === surveyId)?.name ?? 'untitled';
+    window.electron.ipcRenderer.sendMessage('export-result', [surveyId, name]);
+  };
+
+  const handleClear = () => {
+    window.electron.ipcRenderer.sendMessage('clear-result', [surveyId]);
+    handleRefresh();
+  };
+
+  useEffect(() => {
+    handleRefresh();
+  }, [handleRefresh, surveyId]);
+
   return (
-    <div>
+    <div className={styles.wrapper}>
       <div className={styles['top-panel']}>
         <Button
+          onClick={handleRefresh}
           color="secondary"
           variant="outlined"
           startIcon={<RefreshIcon />}
@@ -34,6 +53,7 @@ const ResultPage = () => {
           刷新
         </Button>
         <Button
+          onClick={handleExport}
           color="secondary"
           variant="outlined"
           startIcon={<IosShareIcon />}
@@ -42,6 +62,7 @@ const ResultPage = () => {
           导出
         </Button>
         <Button
+          onClick={handleClear}
           color="secondary"
           variant="outlined"
           startIcon={<DeleteForeverIcon />}
@@ -50,7 +71,11 @@ const ResultPage = () => {
           清空
         </Button>
       </div>
-      <ResultList data={data} />
+      {data ? (
+        <ResultList data={data} />
+      ) : (
+        <CircularProgress sx={{ mt: '8rem' }} color="success" />
+      )}
     </div>
   );
 };

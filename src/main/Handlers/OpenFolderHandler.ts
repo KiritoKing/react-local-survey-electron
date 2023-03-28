@@ -9,16 +9,14 @@ import { getConfig } from '../util';
 async function openFolderHandler(_event: IpcMainInvokeEvent, _args: any) {
   const config = getConfig();
   const surveysPath = path.join(config.workFolder, 'surveys');
-  console.log(surveysPath);
   if (!existsSync(surveysPath)) {
     mkdirSync(surveysPath);
     return null;
   }
 
   const files = readdirSync(surveysPath);
-  console.log(files.length);
   const jsonFiles = files.filter((file) => path.extname(file) === '.json');
-  console.log(jsonFiles.length);
+  console.log(`Opening ${jsonFiles.length} Files in: ${surveysPath}`);
 
   const results = [];
   // eslint-disable-next-line no-unreachable-loop
