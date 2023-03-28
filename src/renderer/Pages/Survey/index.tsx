@@ -16,6 +16,7 @@ const SurveyPage = () => {
   const handleComplete = useCallback((sender: any) => {
     console.log(sender.data);
     nav('/complete');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   model.onComplete.add(handleComplete);
   model.locale = 'zh-cn';

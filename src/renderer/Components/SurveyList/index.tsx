@@ -1,13 +1,12 @@
 /* eslint-disable react/function-component-definition */
 import React from 'react';
 import { Grid } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { ISurveyCache } from '../../../main/typing';
 import SurveyListItem from '../SurveyListItem';
 import styles from './styles.module.scss';
-import { useNavigate } from 'react-router-dom';
 
 interface IProps {
-  // eslint-disable-next-line react/require-default-props
   data?: ISurveyCache[];
   onFail?: () => void;
 }

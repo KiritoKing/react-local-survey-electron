@@ -4,6 +4,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { ISurveyCache } from 'main/typing';
 import React, {
   createContext,
+  createRef,
   useCallback,
   useEffect,
   useMemo,
@@ -15,6 +16,7 @@ import CompletePage from './Pages/Completion';
 import Creator from './Pages/Creator';
 import Home from './Pages/Home';
 import SurveyPage from './Pages/Survey';
+import './Styles/App.css';
 
 const theme = createTheme({
   palette: {
@@ -24,28 +26,49 @@ const theme = createTheme({
   },
 });
 
+interface IRoute {
+  path: string;
+  name: string;
+  element: React.ReactNode;
+  nodeRef: React.RefObject<any>;
+}
+
+export const routes: IRoute[] = [
+  {
+    path: '/',
+    name: 'Home',
+    element: <Home />,
+    nodeRef: createRef(),
+  },
+  {
+    path: '/creator',
+    element: <Creator />,
+    name: 'Creator',
+    nodeRef: createRef(),
+  },
+  {
+    path: '/survey/:surveyId',
+    element: <SurveyPage />,
+    name: 'Survey',
+    nodeRef: createRef(),
+  },
+  {
+    path: '/complete',
+    element: <CompletePage />,
+    name: 'Complete',
+    nodeRef: createRef(),
+  },
+];
+
 const router = createHashRouter([
   {
     path: '/',
     element: <PageFrame />,
-    children: [
-      {
-        index: true,
-        element: <Home />,
-      },
-      {
-        path: '/creator',
-        element: <Creator />,
-      },
-      {
-        path: '/survey/:surveyId',
-        element: <SurveyPage />,
-      },
-      {
-        path: '/complete',
-        element: <CompletePage />,
-      },
-    ],
+    children: routes.map((route) => ({
+      index: route.path === '/',
+      path: route.path === '/' ? undefined : route.path,
+      element: route.element,
+    })),
   },
 ]);
 
@@ -58,11 +81,12 @@ export default function App() {
     window.electron
       .openFolder()
       .then((res: any) => {
-        if (res === null) return;
-        // 注意这里res其实是 ISurvey + Path 的结合对象
-        setSurveyCache(res);
-        window.localStorage.setItem('surveyCache', JSON.stringify(res));
-        return res;
+        // eslint-disable-next-line promise/always-return
+        if (res !== null) {
+          // 注意这里res其实是 ISurvey + Path 的结合对象
+          setSurveyCache(res);
+          window.localStorage.setItem('surveyCache', JSON.stringify(res));
+        }
       })
       .catch(console.log);
   }, []);
