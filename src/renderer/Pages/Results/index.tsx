@@ -72,9 +72,9 @@ const ResultPage = () => {
         </Button>
       </div>
       {data ? (
-        <ResultList data={data} />
-      ) : (
         <CircularProgress sx={{ mt: '8rem' }} color="success" />
+      ) : (
+        <ResultList data={data!} />
       )}
     </div>
   );

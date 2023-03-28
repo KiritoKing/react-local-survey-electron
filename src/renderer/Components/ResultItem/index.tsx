@@ -3,6 +3,7 @@ import React from 'react';
 import { Paper, Typography } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
+import Tooltip from '@mui/material/Tooltip';
 import dayjs from 'dayjs';
 import styles from './styles.module.scss';
 
@@ -39,7 +40,14 @@ const ResultItem: React.FC<IProps> = ({ data }) => {
           {dayjs(data.time).format('YYYY-MM-DD HH:mm:ss')}
         </Typography>
       </div>
-      <div className={styles['right-panel']}>{validationIcon}</div>
+      <div className={styles['right-panel']}>
+        <Tooltip
+          title={data.valid ? '调查已完成' : '调查未完成'}
+          placement="top"
+        >
+          {validationIcon}
+        </Tooltip>
+      </div>
     </Paper>
   );
 };
