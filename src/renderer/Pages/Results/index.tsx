@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Button, ButtonProps } from '@mui/material';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -9,6 +9,18 @@ import { useParams } from 'react-router-dom';
 import ResultList from 'renderer/Components/ResultList';
 import { SurveyListContext } from 'renderer/App';
 import styles from './styles.module.scss';
+
+const CustomButton: React.FC<ButtonProps> = ({ children, ...props }) => (
+  <Button
+    color="secondary"
+    variant="outlined"
+    sx={{ margin: '0.4rem' }}
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...props}
+  >
+    {children}
+  </Button>
+);
 
 const ResultPage = () => {
   const { surveyId } = useParams();
@@ -43,33 +55,15 @@ const ResultPage = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles['top-panel']}>
-        <Button
-          onClick={handleRefresh}
-          color="secondary"
-          variant="outlined"
-          startIcon={<RefreshIcon />}
-          sx={{ margin: '0.4rem' }}
-        >
+        <CustomButton onClick={handleRefresh} startIcon={<RefreshIcon />}>
           刷新
-        </Button>
-        <Button
-          onClick={handleExport}
-          color="secondary"
-          variant="outlined"
-          startIcon={<IosShareIcon />}
-          sx={{ margin: '0.4rem' }}
-        >
+        </CustomButton>
+        <CustomButton onClick={handleExport} startIcon={<IosShareIcon />}>
           导出
-        </Button>
-        <Button
-          onClick={handleClear}
-          color="secondary"
-          variant="outlined"
-          startIcon={<DeleteForeverIcon />}
-          sx={{ margin: '0.4rem' }}
-        >
+        </CustomButton>
+        <CustomButton onClick={handleClear} startIcon={<DeleteForeverIcon />}>
           清空
-        </Button>
+        </CustomButton>
       </div>
       {data ? (
         <CircularProgress sx={{ mt: '8rem' }} color="success" />
