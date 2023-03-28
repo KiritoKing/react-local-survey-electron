@@ -4,7 +4,7 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import React from 'react';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import styles from './styles.module.scss';
-import SurveyListItemMenu from '../SurveyListItemMenu';
+import SurveyListItemMenu from '../SurveyItemMenu';
 
 interface IProps {
   data: ISurveyCache;

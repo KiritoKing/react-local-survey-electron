@@ -1,9 +1,9 @@
 /* eslint import/prefer-default-export: off */
 import { URL } from 'url';
 import path from 'path';
-import { existsSync, writeFileSync, readFileSync } from 'fs';
+import { existsSync, writeFileSync, readFileSync, mkdirSync } from 'fs';
 import { BrowserWindow, IpcMainEvent, IpcMainInvokeEvent } from 'electron';
-import { IConfig } from './typing';
+import { IConfig, IResult, IResultCache } from './typing';
 
 const fs = require('fs');
 
@@ -62,4 +62,22 @@ export function readSingleSurveyFile(filePath: string) {
     console.log(e);
     return null;
   }
+}
+
+export function insertToCache(result: IResult) {
+  const config = getConfig();
+  let cachePath = path.join(config.workFolder, 'results');
+  if (!existsSync(cachePath)) mkdirSync(cachePath);
+  cachePath = path.join(cachePath, result.surveyId);
+  if (!existsSync(cachePath)) mkdirSync(cachePath);
+  cachePath = path.join(cachePath, `cache.json`);
+  if (!existsSync(cachePath)) writeFileSync(cachePath, '[]');
+  const cache = readFileSync(cachePath, 'utf-8');
+  const cacheObject = JSON.parse(cache) as IResultCache[];
+  cacheObject.push({
+    id: result.id,
+    time: result.time,
+    contestant: result.contestant,
+  });
+  writeFileSync(cachePath, JSON.stringify(cacheObject));
 }

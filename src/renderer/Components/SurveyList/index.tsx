@@ -3,7 +3,7 @@ import React from 'react';
 import { Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { ISurveyCache } from '../../../main/typing';
-import SurveyListItem from '../SurveyListItem';
+import SurveyListItem from '../SurveyItem';
 import styles from './styles.module.scss';
 
 interface IProps {
@@ -14,7 +14,7 @@ interface IProps {
 const SurveyList: React.FC<IProps> = ({ data, onFail }) => {
   const nav = useNavigate();
 
-  const handleClickSurvey = (survey: ISurveyCache) => {
+  const handleOpen = (survey: ISurveyCache) => {
     if (survey.data === undefined) {
       onFail && onFail();
       return;
@@ -27,11 +27,11 @@ const SurveyList: React.FC<IProps> = ({ data, onFail }) => {
     nav(`/survey/${survey.id}`);
   };
 
-  const handleDeleteSurvey = (survey: ISurveyCache) => {
+  const handleDelete = (survey: ISurveyCache) => {
     console.log(`Delete: ${survey.id}`);
   };
 
-  const handleEditSurvey = (survey: ISurveyCache) => {
+  const handleEdit = (survey: ISurveyCache) => {
     console.log(`Edit: ${survey.id}`);
   };
 
@@ -43,11 +43,11 @@ const SurveyList: React.FC<IProps> = ({ data, onFail }) => {
             <Grid item xs={6} md={4} key={item.id}>
               <SurveyListItem
                 onClick={(e) => {
-                  handleClickSurvey(item);
+                  handleOpen(item);
                   e.stopPropagation();
                 }}
-                onEdit={() => handleEditSurvey(item)}
-                onDelete={() => handleDeleteSurvey(item)}
+                onEdit={() => handleEdit(item)}
+                onDelete={() => handleDelete(item)}
                 data={item}
               />
             </Grid>

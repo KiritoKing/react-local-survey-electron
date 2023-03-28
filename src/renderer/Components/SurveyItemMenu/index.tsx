@@ -5,6 +5,7 @@ import ListItemText from '@mui/material/ListItemText';
 import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 
 interface IProps extends MenuProps {
   onEdit?: any;
@@ -27,6 +28,10 @@ const SurveyListItemMenu: React.FC<IProps> = ({
       <MenuItem onClick={onDelete}>
         <DeleteIcon fontSize="small" />
         <ListItemText sx={{ ml: 1, color: '#454c4f' }}>删除</ListItemText>
+      </MenuItem>
+      <MenuItem>
+        <AssignmentTurnedInIcon fontSize="small" />
+        <ListItemText sx={{ ml: 1, color: '#454c4f' }}>管理结果</ListItemText>
       </MenuItem>
     </Menu>
   );

@@ -36,3 +36,9 @@ export interface IResult {
   time: number; // UNIX时间戳
   data: any;
 }
+
+export interface IResultCache {
+  id: string;
+  contestant?: string;
+  time: number;
+}
