@@ -38,9 +38,14 @@ const ResultPage = () => {
         console.log(res);
         if (res) setData(res);
         else setData([]);
+        enqueueSnackbar('刷新成功', {
+          variant: 'default',
+          preventDuplicate: true,
+        });
         return res;
       })
       .catch(console.log);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [surveyId]);
 
   const handleExport = () => {
@@ -69,7 +74,8 @@ const ResultPage = () => {
 
   useEffect(() => {
     handleRefresh();
-  }, [handleRefresh, surveyId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [surveyId]);
 
   return (
     <div className={styles.wrapper}>
