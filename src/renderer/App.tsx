@@ -16,7 +16,7 @@ import { SnackbarProvider, closeSnackbar, SnackbarKey } from 'notistack';
 import CloseIcon from '@mui/icons-material/Close';
 import PageFrame from './Components/PageFrame';
 import CompletePage from './Pages/Completion';
-import Creator from './Pages/Creator';
+import EditorPage from './Pages/Editor';
 import Home from './Pages/Home';
 import ResultPage from './Pages/Results';
 import SurveyPage from './Pages/Survey';
@@ -48,8 +48,8 @@ export const routes: IRoute[] = [
     nodeRef: createRef(),
   },
   {
-    path: '/creator',
-    element: <Creator />,
+    path: '/editor/:surveyId?',
+    element: <EditorPage />,
     title: '编辑问卷',
     nodeRef: createRef(),
   },

@@ -17,6 +17,7 @@ const ResultItem: React.FC<IProps> = ({ data }) => {
   ) : (
     <CloseIcon color="error" fontSize="large" />
   );
+
   return (
     <Paper
       className={styles['result-card']}

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -6,51 +6,31 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Box from '@mui/material/Box';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { routes, SurveyListContext } from 'renderer/App';
+import { SurveyListContext } from 'renderer/App';
 import { Typography } from '@mui/material';
+import useTitle from 'renderer/Hooks/useTitle';
+import { useSnackbar } from 'notistack';
 import TopIconButton from './TopIconButton';
 import styles from './styles.module.scss';
-
-function getUrlFirstPart(url: string) {
-  return url.slice(1).indexOf('/') > 0
-    ? url.slice(0, url.slice(1).indexOf('/') + 1)
-    : url;
-}
 
 function HeadBar() {
   const nav = useNavigate();
   const loc = useLocation();
-  const { data: surveyList, refreshHandler: handleRefresh } =
-    useContext(SurveyListContext);
+  const { enqueueSnackbar } = useSnackbar();
+  const { refreshHandler } = useContext(SurveyListContext);
 
-  const [title, setTitle] = useState('心理测评系统');
-
-  useEffect(() => {
-    console.log(loc.pathname);
-    const pathname = getUrlFirstPart(loc.pathname);
-    if (pathname === '') setTitle('心理测评系统');
-    console.log(pathname);
-
-    for (let i = 0; i < routes.length; i += 1) {
-      if (getUrlFirstPart(routes[i].path) === pathname) {
-        let titleTmp = routes[i].title;
-        if (pathname === '/survey' && surveyList) {
-          const surveyId = loc.pathname.split('/')[2];
-          const survey = surveyList.find((s) => s.id === surveyId);
-          if (survey) titleTmp += ` - ${survey.name}`;
-        } else if (pathname === '/results' && surveyList) {
-          const surveyId = loc.pathname.split('/')[2];
-          const survey = surveyList.find((s) => s.id === surveyId);
-          if (survey) titleTmp += ` - ${survey.name}`;
-        }
-        setTitle(titleTmp);
-        break;
-      }
-    }
-  }, [loc, loc.pathname, surveyList]);
+  const title = useTitle(loc.pathname);
 
   const handleBack = () => {
-    nav(-1);
+    nav('/');
+  };
+
+  const handleRefresh = () => {
+    refreshHandler();
+    enqueueSnackbar('成功读取文件刷新列表', {
+      variant: 'success',
+      preventDuplicate: true,
+    });
   };
 
   return (
@@ -65,10 +45,7 @@ function HeadBar() {
               flex: 1,
             }}
           >
-            <TopIconButton
-              onClick={handleBack}
-              disabled={loc.key === 'default'}
-            >
+            <TopIconButton onClick={handleBack} disabled={loc.pathname === '/'}>
               <ArrowBackIosNewIcon />
             </TopIconButton>
             <Typography
@@ -79,7 +56,10 @@ function HeadBar() {
               {title}
             </Typography>
           </Box>
-          <TopIconButton onClick={handleRefresh}>
+          <TopIconButton
+            onClick={handleRefresh}
+            disabled={loc.pathname !== '/'}
+          >
             <RefreshIcon />
           </TopIconButton>
           <TopIconButton>

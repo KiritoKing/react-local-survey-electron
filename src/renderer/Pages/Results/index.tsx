@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import ResultList from 'renderer/Components/ResultList';
 import { SurveyListContext } from 'renderer/App';
 import { useConfirm } from 'material-ui-confirm';
+import { useSnackbar } from 'notistack';
 import styles from './styles.module.scss';
 
 const CustomButton: React.FC<ButtonProps> = ({ children, ...props }) => (
@@ -28,6 +29,7 @@ const ResultPage = () => {
   const surveys = useContext(SurveyListContext).data;
   const [data, setData] = React.useState<IResultCache[]>(); // 默认是undefined
   const confirm = useConfirm();
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleRefresh = useCallback(() => {
     window.electron.ipcRenderer
@@ -58,11 +60,11 @@ const ResultPage = () => {
       .then(() => {
         console.log('Cleared');
         window.electron.ipcRenderer.sendMessage('clear-result', [surveyId]);
+        handleRefresh();
+        enqueueSnackbar('清空成功', { variant: 'default' });
         return null;
       })
       .catch(() => console.log('Clear Canceld'));
-
-    handleRefresh();
   };
 
   useEffect(() => {
