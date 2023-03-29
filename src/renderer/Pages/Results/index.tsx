@@ -8,6 +8,7 @@ import React, { useCallback, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ResultList from 'renderer/Components/ResultList';
 import { SurveyListContext } from 'renderer/App';
+import { useConfirm } from 'material-ui-confirm';
 import styles from './styles.module.scss';
 
 const CustomButton: React.FC<ButtonProps> = ({ children, ...props }) => (
@@ -25,13 +26,16 @@ const CustomButton: React.FC<ButtonProps> = ({ children, ...props }) => (
 const ResultPage = () => {
   const { surveyId } = useParams();
   const surveys = useContext(SurveyListContext).data;
-  const [data, setData] = React.useState<IResultCache[]>([]);
+  const [data, setData] = React.useState<IResultCache[]>(); // 默认是undefined
+  const confirm = useConfirm();
 
   const handleRefresh = useCallback(() => {
     window.electron.ipcRenderer
       .invoke('get-result', surveyId)
       .then((res) => {
-        setData(res);
+        console.log(res);
+        if (res) setData(res);
+        else setData([]);
         return res;
       })
       .catch(console.log);
@@ -44,7 +48,20 @@ const ResultPage = () => {
   };
 
   const handleClear = () => {
-    window.electron.ipcRenderer.sendMessage('clear-result', [surveyId]);
+    confirm({
+      title: '清空所有结果',
+      description: `你确定要清空所有结果吗？这将永久清除所有结果且不可恢复！`,
+      confirmationButtonProps: { variant: 'contained', color: 'error' },
+      cancellationText: '取消',
+      confirmationText: '清除',
+    })
+      .then(() => {
+        console.log('Cleared');
+        window.electron.ipcRenderer.sendMessage('clear-result', [surveyId]);
+        return null;
+      })
+      .catch(() => console.log('Clear Canceld'));
+
     handleRefresh();
   };
 
@@ -65,10 +82,10 @@ const ResultPage = () => {
           清空
         </CustomButton>
       </div>
-      {data ? (
+      {data === undefined ? (
         <CircularProgress sx={{ mt: '8rem' }} color="success" />
       ) : (
-        <ResultList data={data!} />
+        <ResultList data={data} />
       )}
     </div>
   );

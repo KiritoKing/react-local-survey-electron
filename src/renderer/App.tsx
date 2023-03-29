@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { createTheme } from '@mui/material';
+import { createTheme, IconButton } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { ISurveyCache } from 'main/typing';
 import React, {
@@ -11,6 +11,9 @@ import React, {
   useState,
 } from 'react';
 import { RouterProvider, createHashRouter } from 'react-router-dom';
+import { ConfirmProvider } from 'material-ui-confirm';
+import { SnackbarProvider, closeSnackbar, SnackbarKey } from 'notistack';
+import CloseIcon from '@mui/icons-material/Close';
 import PageFrame from './Components/PageFrame';
 import CompletePage from './Pages/Completion';
 import Creator from './Pages/Creator';
@@ -32,7 +35,7 @@ const theme = createTheme({
 
 interface IRoute {
   path: string;
-  name: string;
+  title: string;
   element: React.ReactNode;
   nodeRef: React.RefObject<any>;
 }
@@ -40,32 +43,32 @@ interface IRoute {
 export const routes: IRoute[] = [
   {
     path: '/',
-    name: 'Home',
+    title: '心理测评系统',
     element: <Home />,
     nodeRef: createRef(),
   },
   {
     path: '/creator',
     element: <Creator />,
-    name: 'Creator',
+    title: '编辑问卷',
     nodeRef: createRef(),
   },
   {
     path: '/survey/:surveyId',
     element: <SurveyPage />,
-    name: 'Survey',
+    title: '填写问卷',
     nodeRef: createRef(),
   },
   {
     path: '/complete',
     element: <CompletePage />,
-    name: 'Complete',
+    title: '心理测评系统',
     nodeRef: createRef(),
   },
   {
     path: '/results/:surveyId',
     element: <ResultPage />,
-    name: 'Results',
+    title: '结果管理',
     nodeRef: createRef(),
   },
 ];
@@ -122,11 +125,25 @@ export default function App() {
     return { data: surveyCache, refreshHandler: updateFromFiles };
   }, [surveyCache, updateFromFiles]);
 
+  const snackBarButton = (id: SnackbarKey) => (
+    <IconButton onClick={() => closeSnackbar(id)}>
+      <CloseIcon />
+    </IconButton>
+  );
+
   return (
     <React.StrictMode>
       <SurveyListContext.Provider value={contextData}>
         <ThemeProvider theme={theme}>
-          <RouterProvider fallbackElement={<Home />} router={router} />
+          <ConfirmProvider>
+            <SnackbarProvider
+              maxSnack={3}
+              autoHideDuration={2000}
+              action={(snackBarId) => snackBarButton(snackBarId)}
+            >
+              <RouterProvider fallbackElement={<Home />} router={router} />
+            </SnackbarProvider>
+          </ConfirmProvider>
         </ThemeProvider>
       </SurveyListContext.Provider>
     </React.StrictMode>
