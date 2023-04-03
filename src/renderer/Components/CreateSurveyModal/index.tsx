@@ -38,7 +38,7 @@ const CreateSuveyModal: React.FC<IProps> = ({
           margin="dense"
           id="name"
           label="问卷名"
-          type="name"
+          type="text"
           fullWidth
           variant="standard"
           onChange={handleTextChange}

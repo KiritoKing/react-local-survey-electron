@@ -10,7 +10,7 @@ import saveResultHandler from './Handlers/SaveResultHandler';
 import getResultHandler from './Handlers/GetResult';
 import exportResultHandler from './Handlers/ExportResult';
 import clearResultHandler from './Handlers/ClearResult';
-import createSurveyHandler from './Handlers/CreateSurvey';
+import saveSurveyHandler from './Handlers/SaveSurvey';
 import deleteSurveyHandler from './Handlers/DeleteSurvey';
 
 let mainWindow: BrowserWindow | null = null;
@@ -104,7 +104,7 @@ app
     ipcMain.handle('get-result', getResultHandler);
     ipcMain.on('export-result', exportResultHandler);
     ipcMain.on('clear-result', clearResultHandler);
-    ipcMain.on('create-survey', createSurveyHandler);
+    ipcMain.on('save-survey', saveSurveyHandler);
     ipcMain.on('delete-survey', deleteSurveyHandler);
 
     // eslint-disable-next-line promise/always-return

@@ -9,7 +9,7 @@ export type Channels =
   | 'get-result'
   | 'export-result'
   | 'clear-result'
-  | 'create-survey'
+  | 'save-survey'
   | 'delete-survey';
 
 const electronHandler = {

@@ -12,7 +12,7 @@ export interface ISurvey {
 export interface ISurveyCache {
   id: string;
   name: string;
-  lastModified?: string;
+  lastModified?: string | number;
   creator?: string;
   data?: any; // 可能含有data
   path: string;

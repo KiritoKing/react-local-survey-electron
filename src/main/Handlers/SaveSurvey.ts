@@ -1,10 +1,10 @@
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
 import path from 'path';
 import { getConfig } from '../util';
 import { ipcHanlder, ISurvey } from '../typing';
 
 // SendMessage - 入参要求：arg[0]=ISurvey对象
-const createSurveyHandler: ipcHanlder = (_event, args) => {
+const saveSurveyHandler: ipcHanlder = (_event, args) => {
   if (!(args && args[0])) return; // 参数不正确
   console.log(`Creating: ${args[0].id}`);
 
@@ -14,7 +14,8 @@ const createSurveyHandler: ipcHanlder = (_event, args) => {
   if (!existsSync(savingPath)) mkdirSync(savingPath);
   const newSurvey = args[0] as ISurvey;
   savingPath = path.join(savingPath, `${newSurvey.id}.json`);
+  if (existsSync(savingPath)) rmSync(savingPath);
   writeFileSync(savingPath, JSON.stringify(newSurvey));
 };
 
-export default createSurveyHandler;
+export default saveSurveyHandler;

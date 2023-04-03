@@ -41,7 +41,7 @@ function Home() {
       data: new Model().toJSON(),
     };
     console.log(newSurvey);
-    window.electron.ipcRenderer.sendMessage('create-survey', [newSurvey]);
+    window.electron.ipcRenderer.sendMessage('save-survey', [newSurvey]);
     refreshSurveys();
     nav(`/editor/${newSurvey.id}`);
   };

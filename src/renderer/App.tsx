@@ -21,6 +21,7 @@ import Home from './Pages/Home';
 import ResultPage from './Pages/Results';
 import SurveyPage from './Pages/Survey';
 import './Styles/App.css';
+import ErrorInfo from './Components/ErrorInfo';
 
 const theme = createTheme({
   palette: {
@@ -77,6 +78,7 @@ const router = createHashRouter([
   {
     path: '/',
     element: <PageFrame />,
+    errorElement: <ErrorInfo message="遇到了未知错误" enableBack />,
     children: routes.map((route) => ({
       index: route.path === '/',
       path: route.path === '/' ? undefined : route.path,
