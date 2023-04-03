@@ -1,6 +1,6 @@
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import path from 'path';
-import { getConfig, insertToCache } from '../util';
+import { getConfig, insertToResultCache } from '../util';
 import { ipcHanlder, IResult } from '../typing';
 
 // 入参要求：arg[0]=结果对象
@@ -17,7 +17,7 @@ const saveResultHandler: ipcHanlder = (_event, args) => {
   if (!existsSync(resultPath)) mkdirSync(resultPath);
   resultPath = path.join(resultPath, `${result.id}.json`);
   writeFileSync(resultPath, JSON.stringify(result));
-  insertToCache(result);
+  insertToResultCache(result);
 };
 
 export default saveResultHandler;

@@ -4,7 +4,7 @@ import { IpcMainInvokeEvent, IpcMainEvent } from 'electron';
 export interface ISurvey {
   id: string;
   name: string;
-  lastModified?: string;
+  lastModified?: string | number;
   creator?: string;
   data: any;
 }

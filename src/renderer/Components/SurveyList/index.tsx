@@ -1,7 +1,8 @@
 /* eslint-disable react/function-component-definition */
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useConfirm } from 'material-ui-confirm';
+import { SurveyListContext } from 'renderer/App';
 import { ISurveyCache } from '../../../main/typing';
 import SurveyListItem from '../SurveyItem';
 import ItemList from '../ItemList';
@@ -14,6 +15,7 @@ interface IProps {
 const SurveyList: React.FC<IProps> = ({ data, onFail }) => {
   const nav = useNavigate();
   const confirm = useConfirm();
+  const refreshSurveys = useContext(SurveyListContext).refreshHandler;
 
   const handleOpen = (survey: ISurveyCache) => {
     if (survey.data === undefined) {
@@ -38,6 +40,8 @@ const SurveyList: React.FC<IProps> = ({ data, onFail }) => {
     })
       .then(() => {
         console.log(`Delete: ${survey.id}`);
+        window.electron.ipcRenderer.sendMessage('delete-survey', [survey.id]);
+        refreshSurveys();
         return null;
       })
       .catch(() => console.log('Delete Canceld'));

@@ -8,6 +8,7 @@ import 'survey-core/defaultV2.min.css';
 import 'survey-core/survey.i18n';
 import { SurveyListContext } from 'renderer/App';
 import dayjs from 'dayjs';
+import useSurvey from 'renderer/Hooks/useSurvey';
 
 const saveResult = (surveyId: string, data: any, contestant?: string) => {
   const toSave: IResult = {
@@ -24,9 +25,8 @@ const saveResult = (surveyId: string, data: any, contestant?: string) => {
 const SurveyPage = () => {
   const { surveyId } = useParams();
   const nav = useNavigate();
-  const surveys = (useContext(SurveyListContext) as any).data as ISurveyCache[];
-  const survey = surveys.find((item) => item.id === surveyId);
-  const model = new Model(survey!.data);
+  const survey = useSurvey(surveyId);
+  const model = new Model(survey?.data);
   const handleComplete = useCallback((sender: any) => {
     console.log(sender.data);
     saveResult(surveyId!, sender.data, sender.data.name);

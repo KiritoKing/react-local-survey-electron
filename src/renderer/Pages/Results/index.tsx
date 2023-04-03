@@ -35,7 +35,6 @@ const ResultPage = () => {
     window.electron.ipcRenderer
       .invoke('get-result', surveyId)
       .then((res) => {
-        console.log(res);
         if (res) setData(res);
         else setData([]);
         enqueueSnackbar('刷新成功', {
@@ -44,7 +43,9 @@ const ResultPage = () => {
         });
         return res;
       })
-      .catch(console.log);
+      .catch((e) => {
+        console.log('e', e);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [surveyId]);
 

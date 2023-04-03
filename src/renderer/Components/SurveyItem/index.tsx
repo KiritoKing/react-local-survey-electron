@@ -1,9 +1,10 @@
 import { ISurveyCache } from 'main/typing';
 import { Paper, Typography, IconButton, Box } from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import React from 'react';
+import React, { useMemo } from 'react';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { useNavigate } from 'react-router-dom';
+import dayjs from 'dayjs';
 import styles from './styles.module.scss';
 import SurveyListItemMenu from '../SurveyItemMenu';
 
@@ -35,6 +36,13 @@ const SurveyListItem: React.FC<IProps> = ({
     handleClose();
     nav(`/results/${data.id}`);
   };
+
+  const time = useMemo(() => {
+    if (data?.lastModified)
+      if (typeof data.lastModified === 'string') return data.lastModified;
+      else return dayjs(data.lastModified).format('YYYY-MM-DD HH:mm:ss');
+    return '未知';
+  }, [data]);
   return (
     <div className={styles.wrapper} aria-hidden>
       <Paper
@@ -56,7 +64,7 @@ const SurveyListItem: React.FC<IProps> = ({
             variant="body1"
             sx={{ ml: 1, mt: 0.8, color: '#95a5a6', fontSize: '0.8rem' }}
           >
-            创建时间: {data?.lastModified ? data.lastModified : '未知'}
+            创建时间: {time}
           </Typography>
         </div>
         <Box

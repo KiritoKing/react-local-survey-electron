@@ -1,7 +1,7 @@
 /* eslint import/prefer-default-export: off */
 import { URL } from 'url';
 import path from 'path';
-import { existsSync, writeFileSync, readFileSync, mkdirSync } from 'fs';
+import { existsSync, writeFileSync, readFileSync, mkdirSync, rmSync } from 'fs';
 import { BrowserWindow, IpcMainEvent, IpcMainInvokeEvent } from 'electron';
 import { IConfig, IResult, IResultCache } from './typing';
 
@@ -64,7 +64,7 @@ export function readSingleSurveyFile(filePath: string) {
   }
 }
 
-export function insertToCache(result: IResult) {
+export function insertToResultCache(result: IResult) {
   const config = getConfig();
   let cachePath = path.join(config.workFolder, 'results');
   if (!existsSync(cachePath)) mkdirSync(cachePath);
@@ -78,4 +78,11 @@ export function insertToCache(result: IResult) {
     ...result,
   });
   writeFileSync(cachePath, JSON.stringify(cacheObject));
+}
+
+export function clearResultOfSurvey(surveyId: string) {
+  const config = getConfig();
+  const dirPath = path.join(config.workFolder, 'results', surveyId);
+  if (!existsSync(dirPath)) return;
+  rmSync(dirPath, { recursive: true });
 }

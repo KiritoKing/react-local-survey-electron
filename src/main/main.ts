@@ -4,12 +4,14 @@
 import path from 'path';
 import { app, BrowserWindow, ipcMain, Menu } from 'electron';
 import { resolveHtmlPath } from './util';
-import importFileHandler from './Handlers/ImportFileHandler';
-import openFolderHandler from './Handlers/OpenFolderHandler';
+import importFileHandler from './Handlers/ImportFile';
+import openFolderHandler from './Handlers/OpenFolder';
 import saveResultHandler from './Handlers/SaveResultHandler';
-import getResultHandler from './Handlers/GetResultHandler';
-import exportResultHandler from './Handlers/ExportResultHandler';
-import clearResultHandler from './Handlers/ClearResultHandler';
+import getResultHandler from './Handlers/GetResult';
+import exportResultHandler from './Handlers/ExportResult';
+import clearResultHandler from './Handlers/ClearResult';
+import createSurveyHandler from './Handlers/CreateSurvey';
+import deleteSurveyHandler from './Handlers/DeleteSurvey';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -102,6 +104,8 @@ app
     ipcMain.handle('get-result', getResultHandler);
     ipcMain.on('export-result', exportResultHandler);
     ipcMain.on('clear-result', clearResultHandler);
+    ipcMain.on('create-survey', createSurveyHandler);
+    ipcMain.on('delete-survey', deleteSurveyHandler);
 
     // eslint-disable-next-line promise/always-return
     if (process.env.NODE_ENV === 'production') {
