@@ -1,7 +1,7 @@
 import { Box, Button, Paper, TextField, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import { useSnackbar } from 'notistack';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ErrorInfo from 'renderer/Components/ErrorInfo';
 import useSurvey from 'renderer/Hooks/useSurvey';
@@ -17,11 +17,13 @@ function EditorPage() {
   const [data, setData] = useState(new Model(survey?.data));
   const { enqueueSnackbar } = useSnackbar();
 
+  const surveyEditorMemo = useMemo(() => <SurveyEditor data={data} />, [data]);
+
   const handleSave = () => {
     if (survey === undefined) return;
     survey.name = surveyName ?? survey.name;
     survey.creator = author;
-    survey.data = data;
+    survey.data = JSON.stringify(data);
     survey.lastModified = dayjs().valueOf();
     console.log(survey);
     window.electron.ipcRenderer.sendMessage('save-survey', [survey]);
@@ -79,7 +81,7 @@ function EditorPage() {
           </Button>
         </Box>
       </Paper>
-      <SurveyEditor data={data} />
+      {surveyEditorMemo}
     </Box>
   );
 }
