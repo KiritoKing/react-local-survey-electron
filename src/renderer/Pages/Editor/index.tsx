@@ -79,11 +79,7 @@ function EditorPage() {
           </Button>
         </Box>
       </Paper>
-      <Box>
-        <Box sx={{ mt: 2, width: '70%' }}>
-          <SurveyEditor data={data} />
-        </Box>
-      </Box>
+      <SurveyEditor data={data} />
     </Box>
   );
 }
