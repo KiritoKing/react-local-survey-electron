@@ -8,6 +8,7 @@ interface IProps {
   data: Model;
 }
 
+// TODO: 右侧按钮随左侧内容全量刷新，考虑使用内部渲染方案
 const SurveyEditor: React.FC<IProps> = ({ data: model }) => {
   const [poses, setPoses] = useState<ISegment[]>([]);
   console.log(model.getAllQuestions().map((item) => item.id));
