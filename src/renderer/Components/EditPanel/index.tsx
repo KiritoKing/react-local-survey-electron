@@ -4,9 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { ISurveyElement, PanelModel, Model } from 'survey-core';
 
 export interface ISegment {
-  qHeight: number;
-  data: ISurveyElement;
-  hidden?: boolean;
+  height: number; // Element height
+  data: ISurveyElement; // Question OR Panel
 }
 
 interface IProps {
@@ -14,7 +13,7 @@ interface IProps {
   model: Model;
 }
 
-const EditPanel: React.FC<IProps> = ({ segments, model, hidden }) => {
+const EditPanel: React.FC<IProps> = ({ segments, model }) => {
   const [render, setRender] = useState(segments);
   const removeSegments = (...toDeleted: string[]) => {
     setRender((prev) => {
@@ -28,12 +27,13 @@ const EditPanel: React.FC<IProps> = ({ segments, model, hidden }) => {
     segments?.map((segment) => {
       if (segment.data.isPanel === true) {
         const panel = segment.data as PanelModel;
-        return <Box sx={{ height: segment.qHeight + 16 }} />;
+        return <Box sx={{ height: segment.height + 16 }} />;
       }
       return (
-        <Box sx={{ height: segment.qHeight + 16 }}>
-          <Button>1</Button>
-          <Button>2</Button>
+        <Box sx={{ height: segment.height + 16 }}>
+          <Button variant="contained" sx={{ color: 'white' }}>
+            Edit
+          </Button>
         </Box>
       );
     });
