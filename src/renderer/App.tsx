@@ -134,20 +134,18 @@ export default function App() {
   );
 
   return (
-    <React.StrictMode>
-      <SurveyListContext.Provider value={contextData}>
-        <ThemeProvider theme={theme}>
-          <ConfirmProvider>
-            <SnackbarProvider
-              maxSnack={3}
-              autoHideDuration={2000}
-              action={(snackBarId) => snackBarButton(snackBarId)}
-            >
-              <RouterProvider fallbackElement={<Home />} router={router} />
-            </SnackbarProvider>
-          </ConfirmProvider>
-        </ThemeProvider>
-      </SurveyListContext.Provider>
-    </React.StrictMode>
+    <SurveyListContext.Provider value={contextData}>
+      <ThemeProvider theme={theme}>
+        <ConfirmProvider>
+          <SnackbarProvider
+            maxSnack={3}
+            autoHideDuration={2000}
+            action={(snackBarId) => snackBarButton(snackBarId)}
+          >
+            <RouterProvider fallbackElement={<Home />} router={router} />
+          </SnackbarProvider>
+        </ConfirmProvider>
+      </ThemeProvider>
+    </SurveyListContext.Provider>
   );
 }

@@ -11,33 +11,30 @@ import MetaEditor from 'renderer/Components/MetaEditor';
 
 function EditorPage() {
   const { enqueueSnackbar } = useSnackbar();
-
   const { surveyId } = useParams();
   const survey = useSurvey(surveyId);
 
-  const [surveyName, setSurveyName] = useState<string>();
-  const [author, setAuthor] = useState<string>();
   const [data, setData] = useState<Model>();
 
   useEffect(() => {
     if (survey !== undefined) {
-      setSurveyName(survey.name);
-      setAuthor(survey.creator);
+      console.log('survey in Editor Updated');
       setData(new Model(survey.data));
     }
   }, [survey]);
 
-  const handleSave = useCallback(() => {
-    if (survey === undefined) return;
-    survey.name = surveyName ?? survey.name;
-    survey.creator = author;
-    survey.data = JSON.stringify(data);
-    survey.lastModified = dayjs().valueOf();
-    console.log(survey);
-    window.electron.ipcRenderer.sendMessage('save-survey', [survey]);
-    enqueueSnackbar('保存成功', { variant: 'success' });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [survey, surveyName, author, data]);
+  const handleSave = useCallback(
+    (name: string, author: string) => {
+      if (survey === undefined) return; // 如果没有读取到数据，就拒绝保存
+      survey.name = name;
+      survey.creator = author;
+      survey.data = JSON.stringify(data);
+      survey.lastModified = dayjs().valueOf();
+      window.electron.ipcRenderer.sendMessage('save-survey', [survey]);
+      enqueueSnackbar('保存成功', { variant: 'success' });
+    },
+    [survey, data, enqueueSnackbar]
+  );
 
   const page = useMemo(() => {
     if (survey === undefined || data === undefined)
@@ -52,11 +49,11 @@ function EditorPage() {
           padding: '1rem',
         }}
       >
-        <MetaEditor data={survey} />
+        <MetaEditor data={survey} onSave={handleSave} />
         <SurveyEditor data={data} />
       </Box>
     );
-  }, []);
+  }, [survey, data]);
 
   return page;
 }

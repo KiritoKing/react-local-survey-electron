@@ -38,20 +38,27 @@ const PropertyTextbox: React.FC<ITextbox> = ({
   />
 );
 
-const MetaEditor: React.FC<{ data?: ISurveyCache }> = ({ data }) => {
+const MetaEditor: React.FC<{
+  data?: ISurveyCache;
+  onSave?: (name: string, author: string) => void;
+}> = ({ data, onSave }) => {
   const [surveyName, setSurveyName] = useState<string>();
   const [author, setAuthor] = useState<string>();
 
   useEffect(() => {
-    console.log('Meta Editor Refreshed!');
     if (data !== undefined) {
+      console.log(`Meta data updated: ${data}`);
       setSurveyName(data.name);
       setAuthor(data.creator);
     }
-  }, [data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.name, data?.creator]);
 
   const handleSave = () => {
-    window.alert(surveyName, author);
+    if (surveyName === undefined || author === undefined) return;
+
+    console.log(`Saving ${surveyName} By ${author}`);
+    onSave && onSave(surveyName, author);
   };
 
   return (
