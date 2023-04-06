@@ -7,6 +7,7 @@ import ErrorInfo from 'renderer/Components/ErrorInfo';
 import useSurvey from 'renderer/Hooks/useSurvey';
 import { Model } from 'survey-core';
 import SurveyEditor from 'renderer/Components/SurveyEditor';
+import MetaEditor from 'renderer/Components/MetaEditor';
 
 function EditorPage() {
   const { enqueueSnackbar } = useSnackbar();
@@ -51,48 +52,11 @@ function EditorPage() {
           padding: '1rem',
         }}
       >
-        <Paper sx={{ padding: '3rem 3rem' }} elevation={3}>
-          <Typography variant="h5" marginBottom={3}>
-            <b>元数据修改</b>
-          </Typography>
-          <TextField
-            id="name"
-            label="问卷名"
-            fullWidth
-            type="text"
-            value={surveyName}
-            sx={{ marginBottom: '2rem' }}
-            onChange={(e) => setSurveyName(e.target.value)}
-          />
-          <TextField
-            id="author"
-            label="作者"
-            fullWidth
-            type="text"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-          />
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'row-reverse',
-              marginTop: '1.5rem',
-              padding: '1rem',
-            }}
-          >
-            <Button
-              variant="contained"
-              onClick={handleSave}
-              sx={{ color: 'white' }}
-            >
-              保存全部更改
-            </Button>
-          </Box>
-        </Paper>
+        <MetaEditor data={survey} />
         <SurveyEditor data={data} />
       </Box>
     );
-  }, [author, data, handleSave, survey, surveyName]);
+  }, []);
 
   return page;
 }
