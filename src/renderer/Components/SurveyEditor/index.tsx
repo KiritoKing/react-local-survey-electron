@@ -5,6 +5,7 @@ import { Box, createTheme } from '@mui/material';
 import ReactDOM from 'react-dom';
 import Button from '@mui/material/Button/Button';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import { theme } from 'renderer/App';
 import EditPanel, { ISegment } from '../EditPanel';
 import QuestionEditPanel from '../QuestionEditPanel';
 
@@ -17,17 +18,6 @@ interface IContainer {
   question: Question;
   rendered: boolean;
 }
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#19b394',
-    },
-    secondary: {
-      main: '#0e6150',
-    },
-  },
-});
 
 // TODO: 右侧按钮随左侧内容全量刷新，考虑使用内部渲染方案
 const SurveyEditor: React.FC<IProps> = ({ model }) => {

@@ -1,17 +1,47 @@
-import React from 'react';
-import { Box, Tooltip, Button, SxProps } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Tooltip, Button } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Model, IElement, PanelModel, Question } from 'survey-core';
+import Typography from '@mui/material/Typography';
+import { getQuestionTypeCn, questionTypes } from './typing';
+import QuestionEditModal from '../QuestionEditModal';
+
+const tooltipText = (q: Question) => (
+  <>
+    <Typography>
+      <i>ID：</i>
+      {q.id}
+    </Typography>
+    <Typography>
+      <i>问题类型：</i>
+      {getQuestionTypeCn(q)}
+    </Typography>
+    {q.isRequired && (
+      <Typography>
+        <b>*必填选项</b>
+      </Typography>
+    )}
+  </>
+);
 
 const QuestionEditPanel: React.FC<{ data: Question }> = ({ data }) => {
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  const handleEdit = () => {
+    setEditModalOpen(true);
+  };
+
+  const handleModalClose = () => setEditModalOpen(false);
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
       <Box sx={{ flexGrow: 1 }}>
         <Button
           variant="outlined"
           sx={{ borderColor: '#0e826b', color: '#0e826b' }}
+          onClick={handleEdit}
           startIcon={<ModeEditIcon />}
         >
           编辑
@@ -25,9 +55,14 @@ const QuestionEditPanel: React.FC<{ data: Question }> = ({ data }) => {
           删除
         </Button>
       </Box>
-      <Tooltip title={data.id}>
-        <InfoOutlinedIcon />
+      <Tooltip title={tooltipText(data)} placement="left-end">
+        <InfoOutlinedIcon color={data.isRequired ? 'success' : 'inherit'} />
       </Tooltip>
+      <QuestionEditModal
+        open={editModalOpen}
+        data={data}
+        onClose={handleModalClose}
+      />
     </Box>
   );
 };

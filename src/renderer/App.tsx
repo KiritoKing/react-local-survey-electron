@@ -23,7 +23,7 @@ import SurveyPage from './Pages/Survey';
 import './Styles/App.css';
 import ErrorInfo from './Components/ErrorInfo';
 
-const theme = createTheme({
+export const theme = createTheme({
   palette: {
     primary: {
       main: '#19b394',
