@@ -11,7 +11,7 @@ interface IProps {
 // TODO: 右侧按钮随左侧内容全量刷新，考虑使用内部渲染方案
 const SurveyEditor: React.FC<IProps> = ({ data: model }) => {
   const [poses, setPoses] = useState<ISegment[]>([]);
-  console.log(model.getAllQuestions().map((item) => item.id));
+  console.log(model.getAllQuestions().map((item) => item.name));
 
   const addToPoses = (pos: ISegment) => {
     setPoses((prev) => {
@@ -24,37 +24,37 @@ const SurveyEditor: React.FC<IProps> = ({ data: model }) => {
   model.currentPage;
   model.onAfterRenderQuestion.add(
     useCallback((sender, options) => {
-      console.log(`${options.question.name} rendered`);
-      const rect = options.htmlElement.getBoundingClientRect();
-      const pos: ISegment = {
-        qHeight: rect.height,
-        data: options.question,
-      };
-      addToPoses(pos);
+      console.log(`Question:${options.question.name} rendered`);
+      // const rect = options.htmlElement.getBoundingClientRect();
+      // const pos: ISegment = {
+      //   qHeight: rect.height,
+      //   data: options.question,
+      // };
+      // addToPoses(pos);
     }, [])
   );
   model.onAfterRenderPanel.add(
     useCallback((sender, options) => {
-      console.log(`${options.panel.name} rendered`);
-      addToPoses({ qHeight: 87, data: options.panel });
-      options.panel.questions.forEach((question) => {
-        console.log(question.isVisible);
-      });
+      console.log(`Panel:${options.panel.name} rendered`);
+      console.log(
+        `Panel ${options.panel.name} Expanded=${options.panel.isExpanded}`
+      );
+      // addToPoses({ qHeight: 87, data: options.panel });
+      // options.panel.questions.forEach((question) => {
+      //   console.log(question.isVisible);
+      // });
     }, [])
   );
 
-  model.onPanelVisibleChanged.add(
+  model.onAfterRenderPage.add(
     useCallback((sender, options) => {
-      const panelChildren = options.panel.questions;
-      console.log(`Visible changed: ${options.panel.name}`);
-      panelChildren.forEach((question) => {
-        poses.find((p) => p.data.name === question.name)?.data.collapse();
-      });
+      console.log(`Page:${options.page.name} rendered`);
+      // addToPoses({ qHeight: 87, data: options.page });
     }, [])
   );
 
   model.onAfterRenderSurvey.add(() => {
-    console.log('Survey rendered');
+    console.log('Survey render completed');
   });
 
   return (

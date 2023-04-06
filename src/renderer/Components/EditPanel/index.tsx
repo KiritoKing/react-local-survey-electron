@@ -23,22 +23,6 @@ const EditPanel: React.FC<IProps> = ({ segments, model, hidden }) => {
       return prev;
     });
   };
-  useEffect(() => {
-    console.log('Clear collapsed');
-    const toDeleteNames: string[] = [];
-    // 找到panel，若没有展开，则删除其下所有问题
-    render?.forEach((segment) => {
-      if (segment.data.isPanel === true) {
-        const panel = segment.data as PanelModel;
-        if (panel.isExpanded === false) {
-          panel.questions.forEach((question) => {
-            toDeleteNames.push(question.name);
-          });
-        }
-      }
-    });
-    removeSegments(...toDeleteNames);
-  }, [segments, model]);
 
   const generateButtons = () =>
     segments?.map((segment) => {
