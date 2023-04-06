@@ -1,4 +1,4 @@
-import { Box, Button, Paper, TextField, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import dayjs from 'dayjs';
 import { useSnackbar } from 'notistack';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -50,10 +50,10 @@ function EditorPage() {
         }}
       >
         <MetaEditor data={survey} onSave={handleSave} />
-        <SurveyEditor data={data} />
+        <SurveyEditor model={data} />
       </Box>
     );
-  }, [survey, data]);
+  }, [survey, data, handleSave]);
 
   return page;
 }

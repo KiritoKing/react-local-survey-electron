@@ -16,3 +16,8 @@
   transform: scale(0.9);
   transition: opacity 300ms, transform 300ms;
 }
+
+/* 这个是Editor的样式 */
+.btn-container {
+  margin-top: 2rem;
+}

@@ -3,13 +3,13 @@ import {
   Typography,
   TextField,
   Box,
-  Buttonm,
   SxProps,
   Button,
 } from '@mui/material';
 import { ISurveyCache } from 'main/typing';
 
 import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom';
 
 interface ITextbox {
   name: string;
@@ -40,6 +40,7 @@ const PropertyTextbox: React.FC<ITextbox> = ({
 
 const MetaEditor: React.FC<{
   data?: ISurveyCache;
+  // eslint-disable-next-line no-unused-vars
   onSave?: (name: string, author: string) => void;
 }> = ({ data, onSave }) => {
   const [surveyName, setSurveyName] = useState<string>();
@@ -47,7 +48,7 @@ const MetaEditor: React.FC<{
 
   useEffect(() => {
     if (data !== undefined) {
-      console.log(`Meta data updated: ${data}`);
+      console.log(`Meta data updated`);
       setSurveyName(data.name);
       setAuthor(data.creator);
     }
@@ -56,6 +57,10 @@ const MetaEditor: React.FC<{
 
   const handleSave = () => {
     if (surveyName === undefined || author === undefined) return;
+    ReactDOM.createPortal(
+      <Button variant="contained">测试</Button>,
+      document.body
+    );
 
     console.log(`Saving ${surveyName} By ${author}`);
     onSave && onSave(surveyName, author);
