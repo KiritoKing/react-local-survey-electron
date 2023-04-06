@@ -15,6 +15,14 @@ interface IProps {
 
 const EditPanel: React.FC<IProps> = ({ segments, model }) => {
   const [render, setRender] = useState(segments);
+  const removeSegments = (...toDeleted: string[]) => {
+    setRender((prev) => {
+      if (prev !== undefined)
+        return prev.filter((p) => !toDeleted.includes(p.data.name));
+      return prev;
+    });
+  };
+
   const generateButtons = () =>
     segments?.map((segment) => {
       if (segment.data.isPanel === true) {
