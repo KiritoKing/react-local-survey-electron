@@ -5,7 +5,7 @@ interface IProps {
   children: React.ReactNode;
 }
 
-const ModalSection = () => {
+const ModalSection: React.FC<IProps> = () => {
   return <div>ModalSection</div>;
 };
 
