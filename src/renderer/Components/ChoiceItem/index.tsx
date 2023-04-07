@@ -8,13 +8,14 @@ import styles from './styles.module.scss';
 interface IProps {
   data: IChoice;
   onDelete?: () => void;
-  onChange?: (choice: IChoice) => void;
+  // eslint-disable-next-line no-unused-vars
+  onChange?: (choice: IChoice) => boolean;
 }
 
 interface ITextProps {
   text: string;
   // eslint-disable-next-line no-unused-vars
-  onChange?: (text: string) => void;
+  onChange?: (text: string) => boolean;
 }
 
 const EditableText: React.FC<ITextProps> = ({ text, onChange }) => {
@@ -22,7 +23,9 @@ const EditableText: React.FC<ITextProps> = ({ text, onChange }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const handleSubmitChange = () => {
-    if (ref.current) onChange?.(ref.current.innerText);
+    if (ref.current) {
+      onChange?.(ref.current.innerText);
+    }
   };
 
   const handleDoubleClickText = (
@@ -41,7 +44,6 @@ const EditableText: React.FC<ITextProps> = ({ text, onChange }) => {
       const element = e.target as HTMLDivElement;
       element.contentEditable = 'false';
       setEditing(false);
-      handleSubmitChange();
     }
   };
 
@@ -65,11 +67,11 @@ const EditableText: React.FC<ITextProps> = ({ text, onChange }) => {
 
 const ChoiceItem: React.FC<IProps> = ({ data, onDelete, onChange }) => {
   const handleTitleChange = (text: string) => {
-    onChange?.({ ...data, text });
+    return onChange?.({ text, value: data.value }) ?? false;
   };
 
   const handleValueChange = (value: any) => {
-    onChange?.({ ...data, value });
+    return onChange?.({ value, text: data.text }) ?? false;
   };
 
   return (
@@ -83,7 +85,7 @@ const ChoiceItem: React.FC<IProps> = ({ data, onDelete, onChange }) => {
       }}
       elevation={3}
     >
-      <IconButton sx={{ ml: 0.5, mr: 1 }}>
+      <IconButton onClick={onDelete} sx={{ ml: 0.5, mr: 1 }}>
         <RemoveCircleOutlineIcon color="error" />
       </IconButton>
       <Box

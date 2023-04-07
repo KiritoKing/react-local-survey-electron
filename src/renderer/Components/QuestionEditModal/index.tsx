@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { Button, Dialog, DialogActions, DialogTitle } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  Typography,
+} from '@mui/material';
 import { Question, PanelModel, PageModel } from 'survey-core';
 import ModalSection from '../ModalSection';
 import PropertyEditor from '../PropertyEditor';
@@ -22,6 +28,8 @@ const QuestionEditModal: React.FC<IProps> = ({
   onSave,
   container,
 }) => {
+  if (data === undefined) console.log('Creating a new question');
+
   const [name, setName] = useState(data?.name ?? '');
   const [title, setTitle] = useState(data?.title ?? '');
   const [type, setType] = useState(data?.getType());
@@ -38,6 +46,7 @@ const QuestionEditModal: React.FC<IProps> = ({
     onSave && onSave();
     onClose();
   };
+
   return (
     <Dialog onClose={onClose} open={open} sx={{ padding: 2 }} fullWidth>
       <DialogTitle>编辑问题</DialogTitle>

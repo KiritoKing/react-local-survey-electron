@@ -1,12 +1,11 @@
-import { IResult, ISurveyCache } from 'main/typing';
-import React, { useCallback, useContext } from 'react';
+import { IResult } from 'main/typing';
+import { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Survey } from 'survey-react-ui';
 import { Model } from 'survey-core';
 import { v4 as uuidv4 } from 'uuid';
 import 'survey-core/defaultV2.min.css';
 import 'survey-core/survey.i18n';
-import { SurveyListContext } from 'renderer/App';
 import dayjs from 'dayjs';
 import useSurvey from 'renderer/Hooks/useSurvey';
 
@@ -38,7 +37,7 @@ const SurveyPage = () => {
 
   return (
     <div>
-      <Survey model={model} />
+      <Survey mode="edit" model={model} />
     </div>
   );
 };

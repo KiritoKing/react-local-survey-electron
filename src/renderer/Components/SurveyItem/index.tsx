@@ -64,7 +64,7 @@ const SurveyListItem: React.FC<IProps> = ({
             variant="body1"
             sx={{ ml: 1, mt: 0.8, color: '#95a5a6', fontSize: '0.8rem' }}
           >
-            创建时间: {time}
+            最后修改时间: {time}
           </Typography>
         </div>
         <Box
