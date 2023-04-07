@@ -1,16 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Survey } from 'survey-react-ui';
-import { Model, IElement, PanelModel, Question } from 'survey-core';
-import { Box, createTheme } from '@mui/material';
+import { Model, Question } from 'survey-core';
+import { Box } from '@mui/material';
 import ReactDOM from 'react-dom';
-import Button from '@mui/material/Button/Button';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import { theme } from 'renderer/App';
-import EditPanel, { ISegment } from '../EditPanel';
 import QuestionEditPanel from '../QuestionEditPanel';
 
 interface IProps {
   model: Model;
+  onUpdate: () => void;
 }
 
 interface IContainer {
@@ -20,7 +19,7 @@ interface IContainer {
 }
 
 // TODO: 右侧按钮随左侧内容全量刷新，考虑使用内部渲染方案
-const SurveyEditor: React.FC<IProps> = ({ model }) => {
+const SurveyEditor: React.FC<IProps> = ({ model, onUpdate }) => {
   const [containers, setContainers] = useState<IContainer[]>([]);
   const addContainer = (data: IContainer) => {
     setContainers((prev) => [...prev, data]);
@@ -49,13 +48,13 @@ const SurveyEditor: React.FC<IProps> = ({ model }) => {
       const { dom, question } = container;
       ReactDOM.render(
         <ThemeProvider theme={theme}>
-          <QuestionEditPanel data={question} />
+          <QuestionEditPanel data={question} onUpdate={onUpdate} />
         </ThemeProvider>,
         dom
       );
       container.rendered = true;
     }
-  }, [containers]);
+  }, [containers, onUpdate]);
 
   // 在页面卸载时清空Container
   useEffect(

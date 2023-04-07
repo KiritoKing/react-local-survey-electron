@@ -3,9 +3,9 @@ import { Box, Tooltip, Button } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import { Model, IElement, PanelModel, Question } from 'survey-core';
+import { Question } from 'survey-core';
 import Typography from '@mui/material/Typography';
-import { getQuestionTypeCn, questionTypes } from './typing';
+import { getQuestionTypeCn } from './typing';
 import QuestionEditModal from '../QuestionEditModal';
 
 const tooltipText = (q: Question) => (
@@ -18,6 +18,11 @@ const tooltipText = (q: Question) => (
       <i>问题类型：</i>
       {getQuestionTypeCn(q)}
     </Typography>
+    <Typography>
+      <i>标识符：</i>
+      {q.name}
+    </Typography>
+
     {q.isRequired && (
       <Typography>
         <b>*必填选项</b>
@@ -26,7 +31,12 @@ const tooltipText = (q: Question) => (
   </>
 );
 
-const QuestionEditPanel: React.FC<{ data: Question }> = ({ data }) => {
+interface IProps {
+  data: Question;
+  onUpdate: () => void;
+}
+
+const QuestionEditPanel: React.FC<IProps> = ({ data, onUpdate }) => {
   const [editModalOpen, setEditModalOpen] = useState(false);
 
   const handleEdit = () => {
@@ -62,6 +72,7 @@ const QuestionEditPanel: React.FC<{ data: Question }> = ({ data }) => {
         open={editModalOpen}
         data={data}
         onClose={handleModalClose}
+        onSave={onUpdate}
       />
     </Box>
   );

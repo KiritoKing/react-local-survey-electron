@@ -16,10 +16,17 @@ function EditorPage() {
 
   const [data, setData] = useState<Model>();
 
+  const handleRefreshSurvey = useCallback(() => {
+    enqueueSnackbar('问题保存成功', { preventDuplicate: true });
+    setData(data);
+  }, [data, enqueueSnackbar]);
+
   useEffect(() => {
     if (survey !== undefined) {
       console.log('survey in Editor Updated');
-      setData(new Model(survey.data));
+      const model = new Model(survey.data);
+      model.locale = 'zh-cn';
+      setData(model);
     }
   }, [survey]);
 
@@ -31,7 +38,7 @@ function EditorPage() {
       survey.data = JSON.stringify(data);
       survey.lastModified = dayjs().valueOf();
       window.electron.ipcRenderer.sendMessage('save-survey', [survey]);
-      enqueueSnackbar('保存成功', { variant: 'success' });
+      enqueueSnackbar('问卷保存成功', { variant: 'success' });
     },
     [survey, data, enqueueSnackbar]
   );
@@ -50,10 +57,10 @@ function EditorPage() {
         }}
       >
         <MetaEditor data={survey} onSave={handleSave} />
-        <SurveyEditor model={data} />
+        <SurveyEditor model={data} onUpdate={handleRefreshSurvey} />
       </Box>
     );
-  }, [survey, data, handleSave]);
+  }, [survey, data, handleSave, handleRefreshSurvey]);
 
   return page;
 }

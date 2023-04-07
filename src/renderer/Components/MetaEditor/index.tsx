@@ -1,42 +1,9 @@
-import {
-  Paper,
-  Typography,
-  TextField,
-  Box,
-  SxProps,
-  Button,
-} from '@mui/material';
+import { Paper, Typography, Box, Button } from '@mui/material';
 import { ISurveyCache } from 'main/typing';
 
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
-
-interface ITextbox {
-  name: string;
-  displayName: string;
-  initValue?: string;
-  // eslint-disable-next-line no-unused-vars
-  binding?: (val: string) => void;
-  sx?: SxProps;
-}
-
-const PropertyTextbox: React.FC<ITextbox> = ({
-  name,
-  displayName,
-  initValue,
-  binding,
-  sx,
-}) => (
-  <TextField
-    fullWidth
-    type="text"
-    id={name}
-    label={displayName}
-    value={initValue}
-    onChange={(e) => binding && binding(e.target.value)}
-    sx={sx}
-  />
-);
+import PropertyEditor from '../PropertyEditor';
 
 const MetaEditor: React.FC<{
   data?: ISurveyCache;
@@ -71,14 +38,14 @@ const MetaEditor: React.FC<{
       <Typography variant="h5" marginBottom={3}>
         <b>元数据修改</b>
       </Typography>
-      <PropertyTextbox
+      <PropertyEditor
         name="name"
         displayName="问卷名"
         initValue={surveyName}
         binding={setSurveyName}
         sx={{ marginBottom: '2rem' }}
       />
-      <PropertyTextbox
+      <PropertyEditor
         name="author"
         displayName="作者"
         initValue={author}

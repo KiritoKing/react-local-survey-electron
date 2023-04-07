@@ -23,7 +23,7 @@ type QuestionType =
   | 'signaturepad'
   | 'text';
 
-export function getQuestionTypeNameCn(type: QuestionType) {
+export function getQuestionTypeNameCn(type: QuestionType | string) {
   switch (type) {
     case 'boolean':
       return '勾选框';
@@ -76,26 +76,30 @@ export function getQuestionTypeCn(question: Question) {
   return getQuestionTypeNameCn(question.getType() as QuestionType);
 }
 
-export const questionTypes = [
-  'boolean',
-  'checkbox',
+export const textQuestionTypes = [
+  'text',
   'comment',
-  'dropdown',
-  'tagbox',
   'expression',
-  'file',
   'html',
+  'multipletext',
+];
+
+export const wrapperTypes = ['panel', 'paneldynamic'];
+
+export const selectorTypes = ['dropdown', 'tagbox', 'radiogroup', 'checkbox'];
+
+export const allQuestionTypes = [
+  ...textQuestionTypes,
+  ...wrapperTypes,
+  ...selectorTypes,
+  'boolean',
+  'file',
   'image',
   'imagepicker',
   'matrix',
   'matrixdropdown',
   'matrixdynamic',
-  'multipletext',
-  'panel',
-  'paneldynamic',
-  'radiogroup',
   'rating',
   'ranking',
   'signaturepad',
-  'text',
 ];
