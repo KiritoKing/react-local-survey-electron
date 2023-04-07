@@ -1,8 +1,1 @@
-{
-  "name": "单页面问卷测试",
-  "id": "79cc3c6d-e772-4182-affe-ae5b174cf64f",
-  "lastModified": 1680528007957,
-  "creator": "KiritoKing",
-  "data": "{\"locale\":\"zh-cn\",\"pages\":[{\"name\":\"PersonalDetails\",\"elements\":[{\"type\":\"text\",\"name\":\"FirstName\",\"title\":\"Enter your first name:\"},{\"type\":\"text\",\"name\":\"LastName\",\"title\":\"Enter your last name:\"},{\"type\":\"panel\",\"name\":\"Contacts\",\"elements\":[{\"type\":\"text\",\"name\":\"Telegram\",\"title\":\"Telegram:\"},{\"type\":\"text\",\"name\":\"GitHub\",\"title\":\"GitHub username:\"}],\"title\":\"Contacts (optional)\",\"state\":\"collapsed\"}]}],\"mode\":\"display\"}",
-  "path": "D:\\CodeField\\Web\\electron\\react-local-survey-electron\\workspace\\surveys\\79cc3c6d-e772-4182-affe-ae5b174cf64f.json"
-}
+{"name":"单页面问卷测试","id":"79cc3c6d-e772-4182-affe-ae5b174cf64f","lastModified":1680859595557,"creator":"KiritoKing","data":"{\"locale\":\"zh-cn\",\"pages\":[{\"name\":\"PersonalDetails\",\"elements\":[{\"type\":\"text\",\"name\":\"FirstName\",\"title\":{\"default\":\"Enter your first name:\",\"zh-cn\":\"你的FirstName\"}},{\"type\":\"panel\",\"name\":\"Contacts\",\"elements\":[{\"type\":\"text\",\"name\":\"Telegram\",\"title\":\"Telegram:\"},{\"type\":\"text\",\"name\":\"GitHub\",\"title\":\"GitHub username:\"}],\"title\":\"Contacts (optional)\",\"state\":\"expanded\"}]}],\"mode\":\"display\"}","path":"D:\\CodeField\\Web\\electron\\react-local-survey-electron\\workspace\\surveys\\79cc3c6d-e772-4182-affe-ae5b174cf64f.json"}

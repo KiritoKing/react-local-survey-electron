@@ -5,6 +5,7 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Question } from 'survey-core';
 import Typography from '@mui/material/Typography';
+import { useConfirm } from 'material-ui-confirm';
 import { getQuestionTypeCn } from './typing';
 import QuestionEditModal from '../QuestionEditModal';
 
@@ -33,14 +34,32 @@ const tooltipText = (q: Question) => (
 
 interface IProps {
   data: Question;
-  onUpdate: () => void;
+  onUpdate?: () => void;
+  onDelete?: () => void;
 }
 
-const QuestionEditPanel: React.FC<IProps> = ({ data, onUpdate }) => {
+const QuestionEditPanel: React.FC<IProps> = ({ data, onUpdate, onDelete }) => {
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const confirm = useConfirm();
 
   const handleEdit = () => {
     setEditModalOpen(true);
+  };
+
+  const handleDelete = () => {
+    confirm({
+      title: '删除问题',
+      description: `你确定要删除该问题吗？这是不可恢复的！`,
+      confirmationButtonProps: { variant: 'contained', color: 'error' },
+      cancellationText: '取消',
+      confirmationText: '清除',
+    })
+      .then(() => {
+        console.log(`Delete: ${data.name}`);
+        onDelete?.();
+        return null;
+      })
+      .catch(() => console.log('Delete Canceld'));
   };
 
   const handleModalClose = () => setEditModalOpen(false);
@@ -57,6 +76,7 @@ const QuestionEditPanel: React.FC<IProps> = ({ data, onUpdate }) => {
           编辑
         </Button>
         <Button
+          onClick={handleDelete}
           variant="contained"
           color="error"
           sx={{ ml: 1.5 }}

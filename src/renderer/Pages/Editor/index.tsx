@@ -1,13 +1,17 @@
-import { Box } from '@mui/material';
+import { Box, SpeedDial } from '@mui/material';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import dayjs from 'dayjs';
 import { useSnackbar } from 'notistack';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ErrorInfo from 'renderer/Components/ErrorInfo';
 import useSurvey from 'renderer/Hooks/useSurvey';
-import { Model } from 'survey-core';
+import { Model, PanelModel, PageModel } from 'survey-core';
 import SurveyEditor from 'renderer/Components/SurveyEditor';
 import MetaEditor from 'renderer/Components/MetaEditor';
+import SurveyEditPanel, {
+  ElementType,
+} from 'renderer/Components/SurveyEditPanel';
 
 function EditorPage() {
   const { enqueueSnackbar } = useSnackbar();
@@ -43,6 +47,29 @@ function EditorPage() {
     [survey, data, enqueueSnackbar]
   );
 
+  const handleDeleteQuestion = useCallback(
+    (name: string) => {
+      if (survey && data) {
+        const model = data;
+        const question = model.getQuestionByName(name);
+        if (question === undefined) return;
+        const { parent } = question;
+        parent.removeElement(question);
+        setData(model);
+      }
+    },
+    [data, survey]
+  );
+
+  const handleAdd = useCallback(
+    (type: ElementType) => {
+      setData(data);
+    },
+    [data]
+  );
+
+  const handleDeletePage = useCallback(() => {}, []);
+
   const page = useMemo(() => {
     if (survey === undefined || data === undefined)
       return <ErrorInfo message="未能读取到数据，请返回刷新重试" />;
@@ -57,10 +84,23 @@ function EditorPage() {
         }}
       >
         <MetaEditor data={survey} onSave={handleSave} />
-        <SurveyEditor model={data} onUpdate={handleRefreshSurvey} />
+        <SurveyEditPanel onChange={handleAdd} deletePage={handleDeletePage} />
+        <SurveyEditor
+          model={data}
+          onUpdate={handleRefreshSurvey}
+          onDelete={handleDeleteQuestion}
+        />
       </Box>
     );
-  }, [survey, data, handleSave, handleRefreshSurvey]);
+  }, [
+    survey,
+    data,
+    handleSave,
+    handleAdd,
+    handleDeletePage,
+    handleRefreshSurvey,
+    handleDeleteQuestion,
+  ]);
 
   return page;
 }

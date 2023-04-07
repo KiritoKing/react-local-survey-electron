@@ -92,6 +92,16 @@ export const SurveyListContext = createContext<{
   refreshHandler: () => void;
 }>(undefined as any);
 
+function sortSurveysByTime(surveys: ISurveyCache[]) {
+  const sorter = (a: ISurveyCache, b: ISurveyCache) => {
+    if (a?.lastModified === undefined || b?.lastModified === undefined)
+      return 1; // 没有定义时间的放在最后
+    if (a.lastModified > b.lastModified) return -1;
+    return 1;
+  };
+  return surveys.sort(sorter);
+}
+
 export default function App() {
   const [surveyCache, setSurveyCache] = useState<ISurveyCache[]>();
   const updateFromFiles = useCallback(() => {
@@ -102,7 +112,7 @@ export default function App() {
         // eslint-disable-next-line promise/always-return
         if (res !== null) {
           // 注意这里res其实是 ISurvey + Path 的结合对象
-          setSurveyCache(res);
+          setSurveyCache(sortSurveysByTime(res));
           window.localStorage.setItem('surveyCache', JSON.stringify(res));
         }
       })
@@ -115,7 +125,7 @@ export default function App() {
     console.log('Init list');
     if (cache) {
       console.log('Read from local storage');
-      setSurveyCache(JSON.parse(cache));
+      setSurveyCache(sortSurveysByTime(JSON.parse(cache) as ISurveyCache[]));
     } else {
       updateFromFiles();
     }

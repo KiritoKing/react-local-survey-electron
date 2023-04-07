@@ -1,8 +1,8 @@
 /* eslint-disable react/function-component-definition */
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useConfirm } from 'material-ui-confirm';
 import { SurveyListContext } from 'renderer/App';
+import useDeleteConfirm from 'renderer/Hooks/useDeleteConfirm';
 import { ISurveyCache } from '../../../main/typing';
 import SurveyListItem from '../SurveyItem';
 import ItemList from '../ItemList';
@@ -14,8 +14,11 @@ interface IProps {
 
 const SurveyList: React.FC<IProps> = ({ data, onFail }) => {
   const nav = useNavigate();
-  const confirm = useConfirm();
   const refreshSurveys = useContext(SurveyListContext).refreshHandler;
+  const deleteConfirm = useDeleteConfirm(
+    '删除问卷',
+    `你确定要删除问卷吗？这将永久清除该问卷和其结果，且不可恢复！`
+  );
 
   const handleOpen = (survey: ISurveyCache) => {
     if (survey.data === undefined) {
@@ -31,13 +34,7 @@ const SurveyList: React.FC<IProps> = ({ data, onFail }) => {
   };
 
   const handleDelete = (survey: ISurveyCache) => {
-    confirm({
-      title: '删除问卷',
-      description: `你确定要删除问卷吗？这将永久清除该问卷和其结果，且不可恢复！`,
-      confirmationButtonProps: { variant: 'contained', color: 'error' },
-      cancellationText: '取消',
-      confirmationText: '清除',
-    })
+    deleteConfirm()
       .then(() => {
         console.log(`Delete: ${survey.id}`);
         window.electron.ipcRenderer.sendMessage('delete-survey', [survey.id]);

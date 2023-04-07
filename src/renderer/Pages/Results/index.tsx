@@ -8,8 +8,8 @@ import React, { useCallback, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ResultList from 'renderer/Components/ResultList';
 import { SurveyListContext } from 'renderer/App';
-import { useConfirm } from 'material-ui-confirm';
 import { useSnackbar } from 'notistack';
+import useDeleteConfirm from 'renderer/Hooks/useDeleteConfirm';
 import styles from './styles.module.scss';
 
 const CustomButton: React.FC<ButtonProps> = ({ children, ...props }) => (
@@ -28,7 +28,10 @@ const ResultPage = () => {
   const { surveyId } = useParams();
   const surveys = useContext(SurveyListContext).data;
   const [data, setData] = React.useState<IResultCache[]>(); // 默认是undefined
-  const confirm = useConfirm();
+  const confirm = useDeleteConfirm(
+    '清空所有结果',
+    `你确定要清空所有结果吗？这将永久清除所有结果且不可恢复！`
+  );
   const { enqueueSnackbar } = useSnackbar();
 
   const handleRefresh = useCallback(() => {
@@ -56,13 +59,7 @@ const ResultPage = () => {
   };
 
   const handleClear = () => {
-    confirm({
-      title: '清空所有结果',
-      description: `你确定要清空所有结果吗？这将永久清除所有结果且不可恢复！`,
-      confirmationButtonProps: { variant: 'contained', color: 'error' },
-      cancellationText: '取消',
-      confirmationText: '清除',
-    })
+    confirm()
       .then(() => {
         console.log('Cleared');
         window.electron.ipcRenderer.sendMessage('clear-result', [surveyId]);

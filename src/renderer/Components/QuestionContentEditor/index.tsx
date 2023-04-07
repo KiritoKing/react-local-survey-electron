@@ -1,19 +1,17 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Tooltip, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { Question, QuestionSelectBase } from 'survey-core';
 import AddIcon from '@mui/icons-material/Add';
-import {
-  DragDropContext,
-  Droppable,
-  DropResult,
-  Draggable,
-} from 'react-beautiful-dnd';
-import { ListItem } from 'react/components/list/list-item';
+// import {
+//   DragDropContext,
+//   Droppable,
+//   DropResult,
+//   Draggable,
+// } from 'react-beautiful-dnd';
 import ChoiceItem from '../ChoiceItem';
 import ItemList from '../ItemList';
 import { selectorTypes } from '../QuestionEditPanel/typing';
-import reorder from './helper';
 
 export interface IChoice {
   value: any;
@@ -35,9 +33,11 @@ const ListHeader = () => (
     }}
   >
     <Typography sx={{ fontSize: '14px', color: '#57606f' }}>显示值</Typography>
-    <Typography sx={{ fontSize: '14px', color: '#57606f', mr: 1 }}>
-      实际值
-    </Typography>
+    <Tooltip title="在导出表中实际存储的值" placement="top">
+      <Typography sx={{ fontSize: '14px', color: '#57606f', mr: 1 }}>
+        实际值
+      </Typography>
+    </Tooltip>
   </Box>
 );
 
@@ -79,12 +79,6 @@ const QuestionContentEditor: React.FC<IProps> = ({ data, onUpdate }) => {
     const base = data as QuestionSelectBase;
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const [choices, setChoices] = useState(base.choices);
-    const onDragEnd = ({ destination, source }: DropResult) => {
-      // dropped outside the list
-      if (!destination) return;
-      const newItems = reorder(choices, source.index, destination.index);
-      setChoices(newItems);
-    };
 
     const handleChange = (index: number, value: IChoice) => {
       const newChoices = [...choices];
@@ -121,42 +115,22 @@ const QuestionContentEditor: React.FC<IProps> = ({ data, onUpdate }) => {
     };
 
     const choiceTemplate = (item: IChoice) => (
-      <Draggable draggableId={item.value} index={choices.indexOf(item)}>
-        {(provided, snapshot) => (
-          <div
-            key={item.value}
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-          >
-            <ChoiceItem
-              data={item}
-              onChange={(choice) => {
-                return handleChange(choices.indexOf(item), choice);
-              }}
-              onDelete={() => handleDelete(choices.indexOf(item))}
-            />
-          </div>
-        )}
-      </Draggable>
+      <ChoiceItem
+        data={item}
+        onChange={(choice) => {
+          return handleChange(choices.indexOf(item), choice);
+        }}
+        onDelete={() => handleDelete(choices.indexOf(item))}
+      />
     );
     return (
       <Box>
         <ListHeader />
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="droppable">
-            {(provided) => (
-              // eslint-disable-next-line react/jsx-props-no-spreading
-              <div ref={provided.innerRef} {...provided.droppableProps}>
-                <ItemList
-                  pattern="Stack"
-                  itemSource={choices}
-                  template={choiceTemplate}
-                />
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+        <ItemList
+          pattern="Stack"
+          itemSource={choices}
+          template={choiceTemplate}
+        />
         <ListFooter onClick={handleAdd} />
       </Box>
     );

@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import { Box, IconButton, Paper, Typography } from '@mui/material';
+import { Box, IconButton, Paper } from '@mui/material';
 import React, { useRef, useState } from 'react';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { IChoice } from '../QuestionContentEditor';

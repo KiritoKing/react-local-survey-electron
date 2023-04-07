@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import {
+  Box,
   Button,
   Dialog,
   DialogActions,
   DialogTitle,
+  Switch,
   Typography,
 } from '@mui/material';
 import { Question, PanelModel, PageModel } from 'survey-core';
@@ -33,15 +35,18 @@ const QuestionEditModal: React.FC<IProps> = ({
   const [name, setName] = useState(data?.name ?? '');
   const [title, setTitle] = useState(data?.title ?? '');
   const [type, setType] = useState(data?.getType());
+  const [isRequired, setIsRequired] = useState(data?.isRequired ?? false);
 
   const handleSave = () => {
     if (data === undefined) {
       if (container === undefined || type === undefined) return;
       const question = container.addNewQuestion(type, name);
       question.title = title;
+      question.isRequired = isRequired;
     } else {
       data.name = name;
       data.title = title;
+      data.isRequired = isRequired;
     }
     onSave && onSave();
     onClose();
@@ -75,6 +80,13 @@ const QuestionEditModal: React.FC<IProps> = ({
             sx={{ mt: 2 }}
           />
         )}
+        <Box sx={{ display: 'flex', alignItems: 'center', mt: 1 }}>
+          <Switch
+            checked={isRequired}
+            onChange={(_e, value) => setIsRequired(value)}
+          />
+          <Typography>是否为必填项</Typography>
+        </Box>
       </ModalSection>
       <ModalSection last title="问题内容">
         <QuestionContentEditor data={data} />
