@@ -13,10 +13,16 @@ export interface IChoice {
   imageLink?: string; // A link to the image or video that represents this choice value. Applies only to Image Picker questions.
 }
 
-const QuestionContentEditor: React.FC<{ data: Question }> = ({ data }) => {
+interface IProps {
+  data: Question;
+  onUpdate?: () => void;
+}
+
+const QuestionContentEditor: React.FC<IProps> = ({ data, onUpdate }) => {
   const type = data.getType();
   if (selectorTypes.includes(type)) {
     const base = data as QuestionSelectBase;
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [choices, setChoices] = useState(
       base.choices.sort((a, b) =>
         typeof a.value === 'number' ? a.value - b.value : 0
@@ -27,6 +33,11 @@ const QuestionContentEditor: React.FC<{ data: Question }> = ({ data }) => {
       const newChoices = [...choices];
       newChoices[index] = value;
       setChoices(newChoices);
+      if (data?.choices !== undefined) {
+        console.log('Update choices');
+        data.choices = newChoices;
+      }
+      onUpdate?.();
     };
 
     const choiceTemplate = (item: IChoice) => (

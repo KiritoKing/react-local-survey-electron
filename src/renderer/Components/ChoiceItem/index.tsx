@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { Box, IconButton, Paper, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { IChoice } from '../QuestionContentEditor';
 import styles from './styles.module.scss';
@@ -13,11 +13,17 @@ interface IProps {
 
 interface ITextProps {
   text: string;
+  // eslint-disable-next-line no-unused-vars
   onChange?: (text: string) => void;
 }
 
 const EditableText: React.FC<ITextProps> = ({ text, onChange }) => {
   const [editing, setEditing] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  const handleSubmitChange = () => {
+    if (ref.current) onChange?.(ref.current.innerText);
+  };
 
   const handleDoubleClickText = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -35,11 +41,13 @@ const EditableText: React.FC<ITextProps> = ({ text, onChange }) => {
       const element = e.target as HTMLDivElement;
       element.contentEditable = 'false';
       setEditing(false);
+      handleSubmitChange();
     }
   };
 
   const handleBlur = () => {
     window.getSelection()?.removeAllRanges();
+    handleSubmitChange();
   };
 
   return (
@@ -48,6 +56,7 @@ const EditableText: React.FC<ITextProps> = ({ text, onChange }) => {
       onDoubleClick={handleDoubleClickText}
       onKeyDown={handleKeydown}
       onBlur={handleBlur}
+      ref={ref}
     >
       {text}
     </div>
@@ -55,6 +64,14 @@ const EditableText: React.FC<ITextProps> = ({ text, onChange }) => {
 };
 
 const ChoiceItem: React.FC<IProps> = ({ data, onDelete, onChange }) => {
+  const handleTitleChange = (text: string) => {
+    onChange?.({ ...data, text });
+  };
+
+  const handleValueChange = (value: any) => {
+    onChange?.({ ...data, value });
+  };
+
   return (
     <Paper
       sx={{
@@ -78,8 +95,8 @@ const ChoiceItem: React.FC<IProps> = ({ data, onDelete, onChange }) => {
           pr: 2,
         }}
       >
-        <EditableText text={data.text} />
-        <EditableText text={data.value} />
+        <EditableText text={data.text} onChange={handleTitleChange} />
+        <EditableText text={data.value} onChange={handleValueChange} />
       </Box>
     </Paper>
   );
