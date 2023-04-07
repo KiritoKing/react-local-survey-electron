@@ -29,6 +29,8 @@ const SurveyEditPanel: React.FC<IProps> = ({ onChange, data }) => {
   };
   const handleAdd = (type: ElementType) => {
     if (data === undefined) return;
+    console.log(`Adding a ${type}`);
+
     switch (type) {
       case 'page':
         data.addNewPage(`page${data.pages.length + 1}`, data.currentPageNo);
@@ -37,7 +39,6 @@ const SurveyEditPanel: React.FC<IProps> = ({ onChange, data }) => {
         (data.currentPage as PageModel).addNewPanel();
         break;
       case 'question':
-        console.log(`Adding a ${type}`);
         setModalOpen(true);
         break;
       default:

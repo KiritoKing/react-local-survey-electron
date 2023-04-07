@@ -84,7 +84,7 @@ function EditorPage() {
         }}
       >
         <MetaEditor data={survey} onSave={handleSave} />
-        <SurveyEditPanel onChange={handleAdd} deletePage={handleDeletePage} />
+        <SurveyEditPanel data={data} />
         <SurveyEditor
           model={data}
           onUpdate={handleRefreshSurvey}
