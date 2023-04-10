@@ -12,7 +12,7 @@ const ErrorInfo: React.FC<{
   return (
     <Box
       sx={{
-        mt: mt ?? '10rem',
+        mt: mt ?? 10,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

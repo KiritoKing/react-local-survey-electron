@@ -11,9 +11,10 @@ const ItemList: React.FC<{
   // eslint-disable-next-line no-unused-vars
   template?: (data: any) => React.ReactNode;
   pattern?: DisplayPattern;
-}> = ({ children, itemSource, template, pattern = 'Grid' }) => {
+  mt?: string;
+}> = ({ children, itemSource, template, mt, pattern = 'Grid' }) => {
   if (!children && (!itemSource || itemSource?.length === 0))
-    return <ErrorInfo mt="2rem" message="这里空空如也，没有数据~" />;
+    return <ErrorInfo mt={mt} message="这里空空如也，没有数据~" />;
   if (pattern.toLowerCase() === 'stack')
     return (
       <Stack spacing={2} sx={{ padding: '0.8rem' }}>

@@ -29,7 +29,7 @@ async function openFolderHandler(_event: IpcMainInvokeEvent, _args: any) {
       results.push({ ...survey, path: filePath });
     }
   }
-  if (results.length === 0) return null;
+  if (results.length === 0) return [];
   return results;
 }
 
