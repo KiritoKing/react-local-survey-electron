@@ -12,6 +12,7 @@ import exportResultHandler from './Handlers/ExportResult';
 import clearResultHandler from './Handlers/ClearResult';
 import saveSurveyHandler from './Handlers/SaveSurvey';
 import deleteSurveyHandler from './Handlers/DeleteSurvey';
+import getConfigHandler from './Handlers/GetConfig';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -100,8 +101,10 @@ app
     // 注册IPC通信事件
     ipcMain.handle('import-file', importFileHandler);
     ipcMain.handle('open-folder', openFolderHandler);
-    ipcMain.on('save-result', saveResultHandler);
     ipcMain.handle('get-result', getResultHandler);
+    ipcMain.handle('get-config', getConfigHandler);
+
+    ipcMain.on('save-result', saveResultHandler);
     ipcMain.on('export-result', exportResultHandler);
     ipcMain.on('clear-result', clearResultHandler);
     ipcMain.on('save-survey', saveSurveyHandler);

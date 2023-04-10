@@ -33,6 +33,10 @@ function Home() {
   };
 
   const handleSubmit = (name: string) => {
+    if (name === '') {
+      enqueueSnackbar('问卷名不能为空', { variant: 'error' });
+      return;
+    }
     const newSurvey: ISurvey = {
       id: uuid(),
       name,

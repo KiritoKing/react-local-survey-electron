@@ -175,8 +175,8 @@
     "webpack-merge": "^5.8.0"
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "local-survey-system",
+    "appId": "org.Github.KiritoKing",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [

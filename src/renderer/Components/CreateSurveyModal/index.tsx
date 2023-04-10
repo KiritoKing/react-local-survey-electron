@@ -19,7 +19,7 @@ const CreateSuveyModal: React.FC<IProps> = ({
   close: handleClose,
   setResult,
 }) => {
-  const [name, setName] = useState('');
+  const [name, setName] = useState('新问卷');
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
   };
@@ -41,6 +41,7 @@ const CreateSuveyModal: React.FC<IProps> = ({
           type="text"
           fullWidth
           variant="standard"
+          value={name}
           onChange={handleTextChange}
         />
       </DialogContent>

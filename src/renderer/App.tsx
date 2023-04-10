@@ -22,6 +22,7 @@ import ResultPage from './Pages/Results';
 import SurveyPage from './Pages/Survey';
 import './Styles/App.css';
 import ErrorInfo from './Components/ErrorInfo';
+import SettingsPage from './Pages/Settings';
 
 export const theme = createTheme({
   palette: {
@@ -70,6 +71,12 @@ export const routes: IRoute[] = [
     path: '/results/:surveyId',
     element: <ResultPage />,
     title: '结果管理',
+    nodeRef: createRef(),
+  },
+  {
+    path: '/settings',
+    element: <SettingsPage />,
+    title: '设置',
     nodeRef: createRef(),
   },
 ];

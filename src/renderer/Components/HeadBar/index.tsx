@@ -33,6 +33,10 @@ function HeadBar() {
     });
   };
 
+  const handleSettings = () => {
+    nav('/settings');
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }} className={styles.titleBar}>
       <AppBar position="fixed">
@@ -62,7 +66,7 @@ function HeadBar() {
           >
             <RefreshIcon />
           </TopIconButton>
-          <TopIconButton>
+          <TopIconButton onClick={handleSettings}>
             <SettingsIcon />
           </TopIconButton>
         </Toolbar>

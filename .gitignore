@@ -19,7 +19,7 @@ node_modules
 .DS_Store
 
 # App Storage
-# workspace
+workspace
 workspace/config.json
 workspace/results
 
@@ -27,6 +27,7 @@ release/app/dist
 release/build
 .erb/dll
 
+# Miscs
 .idea
 npm-debug.log.*
 *.css.d.ts
