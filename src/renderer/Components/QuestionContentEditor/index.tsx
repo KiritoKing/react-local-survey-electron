@@ -1,16 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { Box, Button, Tooltip, Typography } from '@mui/material';
-import React, { useMemo, useState } from 'react';
-import { Question, QuestionSelectBase } from 'survey-core';
-import AddIcon from '@mui/icons-material/Add';
-// import {
-//   DragDropContext,
-//   Droppable,
-//   DropResult,
-//   Draggable,
-// } from 'react-beautiful-dnd';
-import ChoiceItem from '../ChoiceItem';
-import ItemList from '../ItemList';
+import React from 'react';
+import { Question } from 'survey-core';
 import { QuestionType, selectorTypes } from '../QuestionEditPanel/typing';
 import ChoiceList from '../ChoiceList';
 

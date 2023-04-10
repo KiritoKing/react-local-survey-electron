@@ -8,7 +8,6 @@ import {
 } from '@mui/material';
 import React from 'react';
 import {
-  allQuestionTypes,
   getQuestionTypeNameCn,
   selectorTypes,
   simpleSelectorTypes,

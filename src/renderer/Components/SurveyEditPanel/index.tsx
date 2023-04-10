@@ -6,7 +6,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import WorkspacesIcon from '@mui/icons-material/Workspaces';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import React, { useMemo, useState } from 'react';
-import { Model, PanelModel, PageModel } from 'survey-core';
+import { Model } from 'survey-core';
 import useDeleteConfirm from 'renderer/Hooks/useDeleteConfirm';
 import AddingModal from '../AddingModal';
 
