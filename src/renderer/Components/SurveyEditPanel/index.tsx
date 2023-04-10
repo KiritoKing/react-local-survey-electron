@@ -35,6 +35,7 @@ const SurveyEditPanel: React.FC<IProps> = ({ onChange, data }) => {
       case 'page':
         break;
       case 'panel':
+        data.pages[data.currentPageNo].addNewPanel();
         break;
       case 'question':
         setModalOpen(true);
@@ -58,9 +59,10 @@ const SurveyEditPanel: React.FC<IProps> = ({ onChange, data }) => {
           container={data?.pages[data.currentPageNo]}
           open={modalOpen}
           onClose={() => setModalOpen(false)}
+          onSave={onChange}
         />
       ),
-    [data, modalOpen]
+    [data, modalOpen, onChange]
   );
 
   return (

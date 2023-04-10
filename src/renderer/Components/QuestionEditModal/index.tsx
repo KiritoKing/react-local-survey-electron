@@ -76,7 +76,7 @@ const QuestionEditModal: React.FC<IProps> = ({
           displayName="问题标识符"
           initValue={name}
           binding={setName}
-          tooltip="问题标识符是问题的唯一标识，导出时将作为表头"
+          tooltip="问题标识符是问题的唯一标识，不可重复，导出时将作为表头。"
         />
         <PropertyEditor
           name="title"

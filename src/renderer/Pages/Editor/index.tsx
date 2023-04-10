@@ -21,7 +21,7 @@ function EditorPage() {
   const [data, setData] = useState<Model>();
 
   const handleRefreshSurvey = useCallback(() => {
-    enqueueSnackbar('问题保存成功', { preventDuplicate: true });
+    enqueueSnackbar('保存成功', { preventDuplicate: true });
     setData(data);
   }, [data, enqueueSnackbar]);
 
@@ -75,7 +75,7 @@ function EditorPage() {
         }}
       >
         <MetaEditor data={survey} onSave={handleSave} />
-        <SurveyEditPanel data={data} />
+        <SurveyEditPanel data={data} onChange={handleRefreshSurvey} />
         <SurveyEditor
           model={data}
           onUpdate={handleRefreshSurvey}
