@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Box,
   Button,
@@ -12,7 +12,7 @@ import { Question, PanelModel, PageModel } from 'survey-core';
 import ModalSection from '../ModalSection';
 import PropertyEditor from '../PropertyEditor';
 import QuestionTypeSelect from '../QuestionTypeSelect';
-import { allQuestionTypes } from '../QuestionEditPanel/typing';
+import { allQuestionTypes, QuestionType } from '../QuestionEditPanel/typing';
 import QuestionContentEditor from '../QuestionContentEditor';
 
 interface IProps {
@@ -30,19 +30,30 @@ const QuestionEditModal: React.FC<IProps> = ({
   onSave,
   container,
 }) => {
-  if (data === undefined) console.log('Creating a new question');
+  const isCreating = useMemo(
+    () => data === undefined && container,
+    [data, container]
+  );
+  if (isCreating) {
+    if (container === undefined)
+      console.log('[Editing Modal] Warning: container is undefined');
+    else console.log('[Question Edit Model] Creating Mode');
+  }
 
   const [name, setName] = useState(data?.name ?? '');
   const [title, setTitle] = useState(data?.title ?? '');
-  const [type, setType] = useState(data?.getType());
+  const [type, setType] = useState(data?.getType() ?? allQuestionTypes[0]);
   const [isRequired, setIsRequired] = useState(data?.isRequired ?? false);
+  const [choices, setChoices] = useState(data?.choices ?? []);
 
   const handleSave = () => {
     if (data === undefined) {
+      // 创建新问题
       if (container === undefined || type === undefined) return;
       const question = container.addNewQuestion(type, name);
       question.title = title;
       question.isRequired = isRequired;
+      question.choices = choices;
     } else {
       data.name = name;
       data.title = title;
@@ -50,6 +61,10 @@ const QuestionEditModal: React.FC<IProps> = ({
     }
     onSave && onSave();
     onClose();
+  };
+
+  const handleEditChoices = (newChoices: any) => {
+    setChoices(newChoices);
   };
 
   return (
@@ -89,7 +104,11 @@ const QuestionEditModal: React.FC<IProps> = ({
         </Box>
       </ModalSection>
       <ModalSection last title="问题内容">
-        <QuestionContentEditor data={data} />
+        <QuestionContentEditor
+          persetType={type as QuestionType}
+          data={data}
+          onUpdate={handleEditChoices}
+        />
       </ModalSection>
       <DialogActions sx={{ padding: 2 }}>
         <Button

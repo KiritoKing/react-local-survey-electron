@@ -13,7 +13,7 @@ const ItemList: React.FC<{
   pattern?: DisplayPattern;
 }> = ({ children, itemSource, template, pattern = 'Grid' }) => {
   if (!children && (!itemSource || itemSource?.length === 0))
-    return <ErrorInfo message="这里空空如也，没有数据~" />;
+    return <ErrorInfo mt="2rem" message="这里空空如也，没有数据~" />;
   if (pattern.toLowerCase() === 'stack')
     return (
       <Stack spacing={2} sx={{ padding: '0.8rem' }}>

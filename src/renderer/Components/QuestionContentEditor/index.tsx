@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { Box, Button, Tooltip, Typography } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Question, QuestionSelectBase } from 'survey-core';
 import AddIcon from '@mui/icons-material/Add';
 // import {
@@ -11,7 +11,7 @@ import AddIcon from '@mui/icons-material/Add';
 // } from 'react-beautiful-dnd';
 import ChoiceItem from '../ChoiceItem';
 import ItemList from '../ItemList';
-import { selectorTypes } from '../QuestionEditPanel/typing';
+import { QuestionType, selectorTypes } from '../QuestionEditPanel/typing';
 
 export interface IChoice {
   value: any;
@@ -21,7 +21,9 @@ export interface IChoice {
 
 interface IProps {
   data?: Question;
-  onUpdate?: () => void;
+  persetType?: QuestionType;
+  // eslint-disable-next-line no-unused-vars
+  onUpdate?: (data?: any) => void;
 }
 
 const ListHeader = () => (
@@ -70,15 +72,19 @@ const ListFooter: React.FC<{ onClick: () => void }> = ({ onClick }) => (
   </Box>
 );
 
-const QuestionContentEditor: React.FC<IProps> = ({ data, onUpdate }) => {
-  const type = data?.getType();
+const QuestionContentEditor: React.FC<IProps> = ({
+  data,
+  onUpdate,
+  persetType,
+}) => {
+  const type = data?.getType() ?? persetType;
 
-  if (type === undefined) return null;
+  if (type === undefined) return null; // 如果既没有数据 又没有新建类型，那么就不渲染
 
   if (selectorTypes.includes(type)) {
     const base = data as QuestionSelectBase;
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [choices, setChoices] = useState(base.choices);
+    const [choices, setChoices] = useState(base?.choices ?? []);
 
     const handleChange = (index: number, value: IChoice) => {
       const newChoices = [...choices];
@@ -88,19 +94,22 @@ const QuestionContentEditor: React.FC<IProps> = ({ data, onUpdate }) => {
         console.log(`Update choices at index ${index}`);
         data.choices = newChoices;
       }
-      onUpdate?.();
+      onUpdate?.(newChoices);
       return true;
     };
 
     const handleAdd = () => {
       const newChoices = [...choices];
-      newChoices.push({ value: '[值]未编辑', text: '[选项]未编辑' });
+      newChoices.push({
+        value: `item${newChoices.length + 1}`,
+        text: `item${newChoices.length + 1}`,
+      });
       setChoices(newChoices);
       if (data?.choices !== undefined) {
         console.log('Add a new choice');
         data.choices = newChoices;
       }
-      onUpdate?.();
+      onUpdate?.(newChoices);
     };
 
     const handleDelete = (index: number) => {
@@ -111,7 +120,7 @@ const QuestionContentEditor: React.FC<IProps> = ({ data, onUpdate }) => {
         console.log('Delete choice: ', index);
         data.choices = newChoices;
       }
-      onUpdate?.();
+      onUpdate?.(newChoices);
     };
 
     const choiceTemplate = (item: IChoice) => (

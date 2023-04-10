@@ -27,7 +27,7 @@ function EditorPage() {
 
   useEffect(() => {
     if (survey !== undefined) {
-      console.log('survey in Editor Updated');
+      console.log('[Editor Page] Survey is updated by hook');
       const model = new Model(survey.data);
       model.locale = 'zh-cn';
       setData(model);

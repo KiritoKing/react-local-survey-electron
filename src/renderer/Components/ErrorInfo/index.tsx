@@ -7,11 +7,12 @@ const ErrorInfo: React.FC<{
   message?: string;
   children?: string;
   enableBack?: boolean;
-}> = ({ message, children, enableBack }) => {
+  mt?: string;
+}> = ({ message, children, enableBack, mt }) => {
   return (
     <Box
       sx={{
-        mt: '10rem',
+        mt: mt ?? '10rem',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

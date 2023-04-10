@@ -15,7 +15,7 @@ const MetaEditor: React.FC<{
 
   useEffect(() => {
     if (data !== undefined) {
-      console.log(`Meta data updated`);
+      console.log(`[Meta Editor] Got meta data updated`);
       setSurveyName(data.name);
       setAuthor(data.creator);
     }

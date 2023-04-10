@@ -33,10 +33,8 @@ const SurveyEditPanel: React.FC<IProps> = ({ onChange, data }) => {
 
     switch (type) {
       case 'page':
-        data.addNewPage(`page${data.pages.length + 1}`, data.currentPageNo);
         break;
       case 'panel':
-        (data.currentPage as PageModel).addNewPanel();
         break;
       case 'question':
         setModalOpen(true);
@@ -54,10 +52,15 @@ const SurveyEditPanel: React.FC<IProps> = ({ onChange, data }) => {
   };
 
   const modal = useMemo(
-    () => (
-      <QuestionEditModal open={modalOpen} onClose={() => setModalOpen(false)} />
-    ),
-    [modalOpen]
+    () =>
+      modalOpen && (
+        <QuestionEditModal
+          container={data?.pages[data.currentPageNo]}
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
+      ),
+    [data, modalOpen]
   );
 
   return (

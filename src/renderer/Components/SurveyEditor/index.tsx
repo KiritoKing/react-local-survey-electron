@@ -29,7 +29,7 @@ const SurveyEditor: React.FC<IProps> = ({ model, onUpdate, onDelete }) => {
   };
 
   const renderHacker = useCallback((sender: Model, options: any) => {
-    console.log(`HtmlElement: ${options.htmlElement.id}}`);
+    console.log(`Hacking HtmlElement: ${options.htmlElement.id}`);
     const container = document.createElement('div');
     container.className = 'btn-container'; // 这个样式定义在App.css里
     const header = options.htmlElement;
@@ -46,7 +46,7 @@ const SurveyEditor: React.FC<IProps> = ({ model, onUpdate, onDelete }) => {
     for (let i = 0; i < containers.length; i++) {
       // eslint-disable-next-line no-continue
       if (containers[i].rendered) continue;
-      console.log(`Render button: ${containers[i].question.name}`);
+      console.log(`Render buttons in Question[${containers[i].question.name}]`);
       const container = containers[i];
       const { dom, question } = container;
       const deleteQuestionHanlder = () => onDelete(question.name);

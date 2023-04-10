@@ -1,6 +1,6 @@
 import { Question } from 'survey-core';
 
-type QuestionType =
+export type QuestionType =
   | 'boolean'
   | 'checkbox'
   | 'comment'
