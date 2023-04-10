@@ -19,7 +19,7 @@ function EditorPage() {
   const [data, setData] = useState<Model>();
 
   const handleRefreshSurvey = useCallback(() => {
-    enqueueSnackbar('保存成功', { preventDuplicate: true });
+    enqueueSnackbar('改动保存成功', { preventDuplicate: true });
     setData(data);
   }, [data, enqueueSnackbar]);
 

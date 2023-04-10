@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react';
 import { Model } from 'survey-core';
+import GroupEditModal from '../GroupEditModal';
 import QuestionEditModal from '../QuestionEditModal';
 import { ElementType } from '../SurveyEditPanel';
 
@@ -27,9 +28,27 @@ const AddingModal: React.FC<IProps> = ({
 
   switch (mode) {
     case 'page':
-      break;
+      return (
+        <GroupEditModal
+          element={mode}
+          open={open}
+          onClose={handleClose}
+          onSave={onSave}
+          container={survey}
+          initName={`Page${survey?.pages.length}`}
+        />
+      );
     case 'panel':
-      break;
+      return (
+        <GroupEditModal
+          element={mode}
+          open={open}
+          onClose={handleClose}
+          onSave={onSave}
+          container={survey?.currentPage}
+          initName={`Panel${survey?.currentPage?.elements.length}`}
+        />
+      );
     case 'question':
       return (
         <QuestionEditModal

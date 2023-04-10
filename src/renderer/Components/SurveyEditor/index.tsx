@@ -82,6 +82,7 @@ const SurveyEditor: React.FC<IProps> = ({ model, onUpdate, onDelete }) => {
   );
 
   const surveyDisplay = useMemo(() => {
+    model.showProgressBar = 'bottom';
     return (
       model && (
         <Survey
