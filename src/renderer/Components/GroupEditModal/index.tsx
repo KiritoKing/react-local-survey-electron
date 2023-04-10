@@ -46,8 +46,12 @@ const GroupEditModal: React.FC<IProps> = ({
         return;
       }
       if (element === 'panel') {
-        const panel = container.addNewPanel(name);
+        const panel: PanelModel = container.addNewPanel(name);
         panel.title = title;
+        panel.addNewQuestion(
+          'text',
+          '占位符：请先添加其他问题再删除本问题，否则分组将被一起删除'
+        );
       } else if (element === 'page') {
         const surveyModel = container as Model;
         const page = surveyModel.addNewPage(
@@ -55,6 +59,11 @@ const GroupEditModal: React.FC<IProps> = ({
           surveyModel.currentPageNo + 1
         );
         page.title = title;
+        page.addNewQuestion(
+          'text',
+          '占位符：请先添加其他问题再删除本问题，否则分组将被一起删除'
+        );
+        surveyModel.currentPage = page;
       }
     } else {
       data.name = name;

@@ -11,6 +11,7 @@ interface IProps {
   // eslint-disable-next-line no-unused-vars
   setOpen: (open: boolean) => void;
   onSave?: () => void;
+  container?: any;
 }
 
 const AddingModal: React.FC<IProps> = ({
@@ -19,6 +20,7 @@ const AddingModal: React.FC<IProps> = ({
   open,
   setOpen,
   onSave,
+  container,
 }) => {
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -53,6 +55,7 @@ const AddingModal: React.FC<IProps> = ({
       return (
         <QuestionEditModal
           container={
+            container ??
             survey?.pages[survey.currentPageNo] ??
             survey?.addNewPage(`page${survey.pages.length}`)
           }

@@ -7,6 +7,7 @@ import WorkspacesIcon from '@mui/icons-material/Workspaces';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import React, { useMemo, useState } from 'react';
 import { Model, PanelModel, PageModel } from 'survey-core';
+import useDeleteConfirm from 'renderer/Hooks/useDeleteConfirm';
 import AddingModal from '../AddingModal';
 
 export type ElementType = 'question' | 'panel' | 'page';
@@ -21,63 +22,36 @@ const SurveyEditPanel: React.FC<IProps> = ({ onChange, data }) => {
   const [addType, setAddType] = useState<ElementType>();
   const menuOpen = Boolean(anchorEl);
   const [modalOpen, setModalOpen] = useState(false);
+  const confirm = useDeleteConfirm();
 
   const raiseAddingModal = (type: ElementType) => {
     setAddType(type);
     setModalOpen(true);
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleMenuClose = () => {
     setAnchorEl(null);
   };
   const handleAdd = (type: ElementType) => {
     if (data === undefined) return;
     console.log(`Adding a ${type}`);
-    let container: PageModel | PanelModel;
-
-    switch (type) {
-      case 'page':
-        container = data.addNewPage(
-          `page${data.pages.length}`,
-          data.currentPageNo + 1
-        );
-        container.addNewQuestion(
-          'text',
-          '占位符：请先添加其他问题再删除本问题'
-        );
-        data.currentPage = container;
-        console.log(`Page count: ${data.pages.length}`);
-        onChange?.();
-        break;
-      case 'panel':
-        container = data.pages[data.currentPageNo].addNewPanel(
-          `panel${data.pages[data.currentPageNo].getAllPanels().length}`
-        );
-        container.title = 'test';
-        container.addNewQuestion(
-          'text',
-          '占位符：请先添加其他问题再删除本问题'
-        );
-        onChange?.();
-        break;
-      case 'question':
-        raiseAddingModal(type);
-        break;
-      default:
-        console.log('Unhandled add behavior');
-        break;
-    }
-    handleClose();
+    raiseAddingModal(type);
+    handleMenuClose();
   };
 
   const handleDelete = () => {
     if (data === undefined) return;
-    data.removePage(data.currentPage);
-    onChange?.();
-    handleClose();
+    confirm()
+      .then(() => {
+        data.removePage(data.currentPage);
+        onChange?.();
+        return true;
+      })
+      .catch(() => console.log('Cancel deletion'));
+    handleMenuClose();
   };
 
   // 新建问题用的Modal
@@ -107,7 +81,7 @@ const SurveyEditPanel: React.FC<IProps> = ({ onChange, data }) => {
       <Box>
         <Button
           color="success"
-          onClick={handleClick}
+          onClick={handleMenuOpen}
           variant="outlined"
           sx={{ width: '7rem' }}
         >
@@ -126,7 +100,7 @@ const SurveyEditPanel: React.FC<IProps> = ({ onChange, data }) => {
         id="add-menu"
         anchorEl={anchorEl}
         open={menuOpen}
-        onClose={handleClose}
+        onClose={handleMenuClose}
       >
         <MenuItem onClick={() => handleAdd('question')}>
           <HelpIcon fontSize="small" sx={{ mr: 1 }} />
