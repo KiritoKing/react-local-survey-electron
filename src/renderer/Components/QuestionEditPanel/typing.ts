@@ -26,15 +26,15 @@ export type QuestionType =
 export function getQuestionTypeNameCn(type: QuestionType | string) {
   switch (type) {
     case 'boolean':
-      return '勾选框';
+      return '是或否问题';
     case 'checkbox':
-      return '多选框';
+      return '多项选择';
     case 'comment':
-      return '多行评论';
+      return '多行文本框';
     case 'dropdown':
-      return '下拉框';
+      return '下拉单项选择';
     case 'tagbox':
-      return '标签框';
+      return '下拉多项选择';
     case 'expression':
       return '表达式';
     case 'file':
@@ -52,21 +52,21 @@ export function getQuestionTypeNameCn(type: QuestionType | string) {
     case 'matrixdynamic':
       return '动态矩阵';
     case 'multipletext':
-      return '多行文本';
+      return '多个单行文本';
     case 'panel':
-      return '面板';
+      return '折叠面板';
     case 'paneldynamic':
-      return '动态面板';
+      return '动态折叠面板';
     case 'radiogroup':
-      return '单选框';
+      return '单项选择';
     case 'rating':
       return '评分';
     case 'ranking':
       return '排名';
     case 'signaturepad':
-      return '签名';
+      return '签名板';
     case 'text':
-      return '单行文本';
+      return '单行文本框';
     default:
       return `未定义-${type}`;
   }
@@ -76,30 +76,31 @@ export function getQuestionTypeCn(question: Question) {
   return getQuestionTypeNameCn(question.getType() as QuestionType);
 }
 
-export const textQuestionTypes = [
-  'text',
-  'comment',
-  'expression',
-  'html',
-  'multipletext',
-];
+export const textQuestionTypes = ['text', 'comment'];
 
-export const wrapperTypes = ['panel', 'paneldynamic'];
+export const wrapperTypes = ['panel'];
 
 export const selectorTypes = ['dropdown', 'tagbox', 'radiogroup', 'checkbox'];
 
-export const allQuestionTypes = [
-  ...textQuestionTypes,
-  ...wrapperTypes,
-  ...selectorTypes,
-  'boolean',
+export const simpleSelectorTypes = ['boolean', 'rating', 'ranking'];
+
+export const forbiddenTypes = [
+  'expression',
+  'html',
   'file',
   'image',
   'imagepicker',
   'matrix',
   'matrixdropdown',
   'matrixdynamic',
-  'rating',
-  'ranking',
   'signaturepad',
+  'multipletext',
+  'paneldynamic',
+];
+
+export const allQuestionTypes = [
+  ...textQuestionTypes,
+  ...wrapperTypes,
+  ...selectorTypes,
+  ...simpleSelectorTypes,
 ];

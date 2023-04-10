@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Box,
   Button,
@@ -34,11 +34,13 @@ const QuestionEditModal: React.FC<IProps> = ({
     () => data === undefined && container,
     [data, container]
   );
-  if (isCreating) {
-    if (container === undefined)
-      console.log('[Editing Modal] Warning: container is undefined');
-    else console.log('[Question Edit Model] Creating Mode');
-  }
+  useEffect(() => {
+    if (isCreating) {
+      if (container === undefined)
+        console.log('[Editing Modal] Warning: container is undefined');
+      else console.log('[Question Edit Model] Creating Mode');
+    }
+  }, [container, isCreating]);
 
   const [name, setName] = useState(data?.name ?? '');
   const [title, setTitle] = useState(data?.title ?? '');
@@ -49,7 +51,14 @@ const QuestionEditModal: React.FC<IProps> = ({
   const handleSave = () => {
     if (data === undefined) {
       // 创建新问题
-      if (container === undefined || type === undefined) return;
+      if (type === undefined) {
+        console.log('[Question Edit Model] Warning: type is undefined');
+        return; // 类型为空短路
+      }
+      if (container === undefined) {
+        console.log('[Question Edit Model] Warning: container is undefined');
+        return; // 容器为空短路
+      }
       const question = container.addNewQuestion(type, name);
       question.title = title;
       question.isRequired = isRequired;

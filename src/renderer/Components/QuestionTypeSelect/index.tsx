@@ -1,8 +1,18 @@
-import { Box, TextField, SxProps, MenuItem } from '@mui/material';
+/* eslint-disable react/no-array-index-key */
+import {
+  Box,
+  TextField,
+  SxProps,
+  MenuItem,
+  ListSubheader,
+} from '@mui/material';
 import React from 'react';
 import {
   allQuestionTypes,
   getQuestionTypeNameCn,
+  selectorTypes,
+  simpleSelectorTypes,
+  textQuestionTypes,
 } from '../QuestionEditPanel/typing';
 
 interface ITextbox {
@@ -34,9 +44,21 @@ const QuestionTypeSelect: React.FC<ITextbox> = ({
       sx={sx}
       helperText={tooltip}
     >
-      {allQuestionTypes.map((item, index) => (
-        // eslint-disable-next-line react/no-array-index-key
-        <MenuItem key={index} value={item}>
+      <ListSubheader>文本输入</ListSubheader>
+      {textQuestionTypes.map((item, index) => (
+        <MenuItem key={`text-${index}`} value={item}>
+          {getQuestionTypeNameCn(item)}
+        </MenuItem>
+      ))}
+      <ListSubheader>选择题</ListSubheader>
+      {selectorTypes.map((item, index) => (
+        <MenuItem key={`selector-${index}`} value={item}>
+          {getQuestionTypeNameCn(item)}
+        </MenuItem>
+      ))}
+      <ListSubheader>简单选择</ListSubheader>
+      {simpleSelectorTypes.map((item, index) => (
+        <MenuItem key={`simple-selector-${index}`} value={item}>
           {getQuestionTypeNameCn(item)}
         </MenuItem>
       ))}

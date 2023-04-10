@@ -9,9 +9,7 @@ import useSurvey from 'renderer/Hooks/useSurvey';
 import { Model, PanelModel, PageModel } from 'survey-core';
 import SurveyEditor from 'renderer/Components/SurveyEditor';
 import MetaEditor from 'renderer/Components/MetaEditor';
-import SurveyEditPanel, {
-  ElementType,
-} from 'renderer/Components/SurveyEditPanel';
+import SurveyEditPanel from 'renderer/Components/SurveyEditPanel';
 
 function EditorPage() {
   const { enqueueSnackbar } = useSnackbar();
@@ -34,17 +32,37 @@ function EditorPage() {
     }
   }, [survey]);
 
+  const clearEmptyGroups = useCallback((model?: Model) => {
+    if (model === undefined) return;
+    const pagesToDel: PageModel[] = [];
+    model.pages.forEach((page: PageModel) => {
+      console.log(`Page ${page.name} has ${page.elements.length} elements`);
+      page.elements.forEach((element) => {
+        if (element.isPanel && (element as PanelModel).elements.length === 0) {
+          console.log(`Deleting empty panel ${element.name}`);
+          page.removeElement(element);
+        }
+      });
+      if (page.elements.length === 0) pagesToDel.push(page);
+    });
+    console.log(`Deleting ${pagesToDel.length} empty pages`);
+    pagesToDel.forEach((page) => {
+      model.removePage(page);
+    });
+  }, []);
+
   const handleSave = useCallback(
     (name: string, author: string) => {
       if (survey === undefined) return; // 如果没有读取到数据，就拒绝保存
       survey.name = name;
       survey.creator = author;
+      clearEmptyGroups(data); // 清理空组
       survey.data = JSON.stringify(data);
       survey.lastModified = dayjs().valueOf();
       window.electron.ipcRenderer.sendMessage('save-survey', [survey]);
       enqueueSnackbar('问卷保存成功', { variant: 'success' });
     },
-    [survey, data, enqueueSnackbar]
+    [survey, clearEmptyGroups, data, enqueueSnackbar]
   );
 
   const handleDeleteQuestion = useCallback(

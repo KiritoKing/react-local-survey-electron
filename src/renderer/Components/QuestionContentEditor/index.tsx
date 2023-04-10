@@ -12,6 +12,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ChoiceItem from '../ChoiceItem';
 import ItemList from '../ItemList';
 import { QuestionType, selectorTypes } from '../QuestionEditPanel/typing';
+import ChoiceList from '../ChoiceList';
 
 export interface IChoice {
   value: any;
@@ -26,52 +27,6 @@ interface IProps {
   onUpdate?: (data?: any) => void;
 }
 
-const ListHeader = () => (
-  <Box
-    sx={{
-      display: 'flex',
-      justifyContent: 'space-between',
-      ml: '4.5rem',
-    }}
-  >
-    <Typography sx={{ fontSize: '14px', color: '#57606f' }}>显示值</Typography>
-    <Tooltip title="在导出表中实际存储的值" placement="top">
-      <Typography sx={{ fontSize: '14px', color: '#57606f', mr: 1 }}>
-        实际值
-      </Typography>
-    </Tooltip>
-  </Box>
-);
-
-const ListFooter: React.FC<{ onClick: () => void }> = ({ onClick }) => (
-  <Box
-    sx={{
-      display: 'flex',
-      alignItems: 'center',
-      flexDirection: 'column',
-    }}
-  >
-    <Button
-      onClick={onClick}
-      sx={{ margin: 1 }}
-      variant="outlined"
-      startIcon={<AddIcon />}
-    >
-      添加
-    </Button>
-    <Typography
-      sx={{
-        textAlign: 'center',
-        mt: 2,
-        color: '#57606f',
-        fontSize: '14px',
-      }}
-    >
-      温馨提示：双击文本可以修改内容
-    </Typography>
-  </Box>
-);
-
 const QuestionContentEditor: React.FC<IProps> = ({
   data,
   onUpdate,
@@ -81,69 +36,10 @@ const QuestionContentEditor: React.FC<IProps> = ({
 
   if (type === undefined) return null; // 如果既没有数据 又没有新建类型，那么就不渲染
 
-  if (selectorTypes.includes(type)) {
-    const base = data as QuestionSelectBase;
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [choices, setChoices] = useState(base?.choices ?? []);
+  if (selectorTypes.includes(type))
+    // 选择题编辑器
+    return <ChoiceList data={data} onUpdate={onUpdate} />;
 
-    const handleChange = (index: number, value: IChoice) => {
-      const newChoices = [...choices];
-      newChoices[index] = value;
-      setChoices(newChoices);
-      if (data?.choices !== undefined) {
-        console.log(`Update choices at index ${index}`);
-        data.choices = newChoices;
-      }
-      onUpdate?.(newChoices);
-      return true;
-    };
-
-    const handleAdd = () => {
-      const newChoices = [...choices];
-      newChoices.push({
-        value: `item${newChoices.length + 1}`,
-        text: `item${newChoices.length + 1}`,
-      });
-      setChoices(newChoices);
-      if (data?.choices !== undefined) {
-        console.log('Add a new choice');
-        data.choices = newChoices;
-      }
-      onUpdate?.(newChoices);
-    };
-
-    const handleDelete = (index: number) => {
-      const newChoices = [...choices];
-      newChoices.splice(index, 1);
-      setChoices(newChoices);
-      if (data?.choices !== undefined) {
-        console.log('Delete choice: ', index);
-        data.choices = newChoices;
-      }
-      onUpdate?.(newChoices);
-    };
-
-    const choiceTemplate = (item: IChoice) => (
-      <ChoiceItem
-        data={item}
-        onChange={(choice) => {
-          return handleChange(choices.indexOf(item), choice);
-        }}
-        onDelete={() => handleDelete(choices.indexOf(item))}
-      />
-    );
-    return (
-      <Box>
-        <ListHeader />
-        <ItemList
-          pattern="Stack"
-          itemSource={choices}
-          template={choiceTemplate}
-        />
-        <ListFooter onClick={handleAdd} />
-      </Box>
-    );
-  }
   return <div>该类型问题没有数据可以更改</div>;
 };
 

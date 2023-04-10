@@ -6,8 +6,9 @@ import HelpIcon from '@mui/icons-material/Help';
 import WorkspacesIcon from '@mui/icons-material/Workspaces';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import React, { useMemo, useState } from 'react';
-import { Model, PanelModel, PageModel } from 'survey-core';
+import { Model, PanelModel, PageModel, IPanel } from 'survey-core';
 import QuestionEditModal from '../QuestionEditModal';
+import AddingModal from '../AddingModal';
 
 export type ElementType = 'question' | 'panel' | 'page';
 
@@ -18,8 +19,14 @@ interface IProps {
 
 const SurveyEditPanel: React.FC<IProps> = ({ onChange, data }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [addType, setAddType] = useState<ElementType>();
   const menuOpen = Boolean(anchorEl);
   const [modalOpen, setModalOpen] = useState(false);
+
+  const raiseAddingModal = (type: ElementType) => {
+    setAddType(type);
+    setModalOpen(true);
+  };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -30,15 +37,33 @@ const SurveyEditPanel: React.FC<IProps> = ({ onChange, data }) => {
   const handleAdd = (type: ElementType) => {
     if (data === undefined) return;
     console.log(`Adding a ${type}`);
+    let container: PageModel | PanelModel;
 
     switch (type) {
       case 'page':
+        container = data.addNewPage(
+          `page${data.pages.length}`,
+          data.currentPageNo + 1
+        );
+        container.addNewQuestion(
+          'text',
+          '占位符：请先添加其他问题再删除本问题'
+        );
+        data.currentPage = container;
+        console.log(`Page count: ${data.pages.length}`);
         break;
       case 'panel':
-        data.pages[data.currentPageNo].addNewPanel();
+        container = data.pages[data.currentPageNo].addNewPanel(
+          `panel${data.pages[data.currentPageNo].getAllPanels().length}`
+        );
+        container.title = 'test';
+        container.addNewQuestion(
+          'text',
+          '占位符：请先添加其他问题再删除本问题'
+        );
         break;
       case 'question':
-        setModalOpen(true);
+        raiseAddingModal(type);
         break;
       default:
         console.log('Unhandled add behavior');
@@ -52,17 +77,18 @@ const SurveyEditPanel: React.FC<IProps> = ({ onChange, data }) => {
     handleClose();
   };
 
+  // 新建问题用的Modal
   const modal = useMemo(
-    () =>
-      modalOpen && (
-        <QuestionEditModal
-          container={data?.pages[data.currentPageNo]}
-          open={modalOpen}
-          onClose={() => setModalOpen(false)}
-          onSave={onChange}
-        />
-      ),
-    [data, modalOpen, onChange]
+    () => (
+      <AddingModal
+        survey={data}
+        mode={addType}
+        open={modalOpen}
+        setOpen={setModalOpen}
+        onSave={onChange}
+      />
+    ),
+    [addType, data, modalOpen, onChange]
   );
 
   return (
