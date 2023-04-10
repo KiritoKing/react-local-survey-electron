@@ -61,15 +61,6 @@ function EditorPage() {
     [data, survey]
   );
 
-  const handleAdd = useCallback(
-    (type: ElementType) => {
-      setData(data);
-    },
-    [data]
-  );
-
-  const handleDeletePage = useCallback(() => {}, []);
-
   const page = useMemo(() => {
     if (survey === undefined || data === undefined)
       return <ErrorInfo message="未能读取到数据，请返回刷新重试" />;
@@ -92,15 +83,7 @@ function EditorPage() {
         />
       </Box>
     );
-  }, [
-    survey,
-    data,
-    handleSave,
-    handleAdd,
-    handleDeletePage,
-    handleRefreshSurvey,
-    handleDeleteQuestion,
-  ]);
+  }, [survey, data, handleSave, handleRefreshSurvey, handleDeleteQuestion]);
 
   return page;
 }
