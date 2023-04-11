@@ -8,12 +8,22 @@ import {
   Switch,
   Typography,
 } from '@mui/material';
-import { Question, PanelModel, PageModel } from 'survey-core';
+import {
+  Question,
+  PanelModel,
+  PageModel,
+  QuestionRatingModel,
+} from 'survey-core';
 import ModalSection from '../ModalSection';
 import PropertyEditor from '../PropertyEditor';
 import QuestionTypeSelect from '../QuestionTypeSelect';
-import { allQuestionTypes, QuestionType } from '../QuestionEditPanel/typing';
+import {
+  allQuestionTypes,
+  QuestionType,
+  selectorTypes,
+} from '../QuestionEditPanel/typing';
 import QuestionContentEditor from '../QuestionContentEditor';
+import { IRating } from '../RatingEditor';
 
 interface IProps {
   data?: Question;
@@ -35,6 +45,7 @@ const QuestionEditModal: React.FC<IProps> = ({
   const [type, setType] = useState(data?.getType() ?? allQuestionTypes[0]);
   const [isRequired, setIsRequired] = useState(data?.isRequired ?? false);
   const [choices, setChoices] = useState(data?.choices ?? []);
+  const [ratingInfo, setRatingInfo] = useState<IRating>();
 
   const handleSave = () => {
     if (data === undefined) {
@@ -50,7 +61,15 @@ const QuestionEditModal: React.FC<IProps> = ({
       const question = container.addNewQuestion(type, name);
       question.title = title;
       question.isRequired = isRequired;
-      question.choices = choices;
+      if (selectorTypes.includes(type))
+        question.choices = choices; // 针对选择题的保存操作
+      else if (type === 'rating') {
+        if (ratingInfo === undefined) return; // 评分题的保存操作（短路)
+        const rq = question as QuestionRatingModel;
+        rq.maxRateDescription = ratingInfo?.maxRateDescription ?? '';
+        rq.minRateDescription = ratingInfo?.minRateDescription ?? '';
+        rq.rateValues = ratingInfo.rates;
+      }
     } else {
       data.name = name;
       data.title = title;
@@ -60,8 +79,9 @@ const QuestionEditModal: React.FC<IProps> = ({
     onClose();
   };
 
-  const handleEditChoices = (newChoices: any) => {
-    setChoices(newChoices);
+  const handleContentUpdate = (recvData: any) => {
+    if (selectorTypes.includes(type)) setChoices(recvData);
+    else if (type === 'rating') setRatingInfo(recvData);
   };
 
   return (
@@ -105,7 +125,7 @@ const QuestionEditModal: React.FC<IProps> = ({
         <QuestionContentEditor
           persetType={type as QuestionType}
           data={data}
-          onUpdate={handleEditChoices}
+          onUpdate={handleContentUpdate}
         />
       </ModalSection>
       <DialogActions sx={{ padding: 2 }}>

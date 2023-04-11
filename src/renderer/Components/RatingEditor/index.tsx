@@ -9,10 +9,10 @@ interface IProps {
   onUpdate?: (data?: any) => void;
 }
 
-interface IRating {
+export interface IRating {
   minRateDescription?: string;
   maxRateDescription?: string;
-  rateMax: number;
+  rates: any[];
 }
 
 const RatingEditor: React.FC<IProps> = ({ data, onUpdate }) => {
@@ -23,19 +23,27 @@ const RatingEditor: React.FC<IProps> = ({ data, onUpdate }) => {
   );
 
   useEffect(() => {
-    if (data === undefined) return;
-    data.minRateDescription = minText ?? '';
-    data.maxRateDescription = maxText ?? '';
-    data.rateMax = maxRate;
     const rates: number[] = [];
     // eslint-disable-next-line no-plusplus
     for (let i = 1; i <= maxRate; i++) {
       rates.push(i);
     }
-    data.rateValues = rates;
+    const info: IRating = {
+      minRateDescription: minText,
+      maxRateDescription: maxText,
+      rates,
+    };
+
+    if (data !== undefined) {
+      console.log(`Update rating data: ${data.name}`);
+      data.minRateDescription = minText ?? '';
+      data.maxRateDescription = maxText ?? '';
+      data.rateMax = maxRate;
+      data.rateValues = rates;
+    }
     // eslint-disable-next-line consistent-return
     return () => {
-      onUpdate?.(data);
+      onUpdate?.(info);
     };
   }, [data, maxRate, maxText, minText, onUpdate]);
 
@@ -47,13 +55,14 @@ const RatingEditor: React.FC<IProps> = ({ data, onUpdate }) => {
         tooltip="允许的最大评分"
         initValue={maxRate}
         binding={setMaxRate}
-        sx={{ mt: 2 }}
+        autoFocus
         numeric
       />
       <PropertyEditor
         name="minText"
         displayName="最小值文本"
         tooltip="显示在最小值旁的说明文本"
+        sx={{ mt: 2 }}
         initValue={minText}
         binding={setMinText}
       />

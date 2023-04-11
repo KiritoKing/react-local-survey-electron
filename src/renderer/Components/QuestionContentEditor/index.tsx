@@ -15,7 +15,7 @@ interface IProps {
   data?: Question;
   persetType?: QuestionType;
   // eslint-disable-next-line no-unused-vars
-  onUpdate?: (data?: any) => void;
+  onUpdate?: (data: any) => void;
 }
 
 const QuestionContentEditor: React.FC<IProps> = ({
@@ -30,7 +30,9 @@ const QuestionContentEditor: React.FC<IProps> = ({
   if (selectorTypes.includes(type))
     return <ChoiceList data={data} onUpdate={onUpdate} />;
   if (type === 'rating')
-    return <RatingEditor data={data as QuestionRatingModel} />;
+    return (
+      <RatingEditor data={data as QuestionRatingModel} onUpdate={onUpdate} />
+    );
 
   return <div>该类型问题没有数据可以更改</div>;
 };
