@@ -9,6 +9,7 @@ import React, { useMemo, useState } from 'react';
 import { Model } from 'survey-core';
 import useDeleteConfirm from 'renderer/Hooks/useDeleteConfirm';
 import AddingModal from '../AddingModal';
+import GroupEditModal from '../GroupEditModal';
 
 export type ElementType = 'question' | 'panel' | 'page';
 
@@ -21,12 +22,13 @@ const SurveyEditPanel: React.FC<IProps> = ({ onChange, data }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [addType, setAddType] = useState<ElementType>();
   const menuOpen = Boolean(anchorEl);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [addingModalOpen, setAddingModalOpen] = useState(false);
+  const [editingModalOpen, setEditingModalOpen] = useState(false);
   const confirm = useDeleteConfirm();
 
   const raiseAddingModal = (type: ElementType) => {
     setAddType(type);
-    setModalOpen(true);
+    setAddingModalOpen(true);
   };
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -42,6 +44,10 @@ const SurveyEditPanel: React.FC<IProps> = ({ onChange, data }) => {
     handleMenuClose();
   };
 
+  const handleEdit = () => {
+    setEditingModalOpen(true);
+  };
+
   const handleDelete = () => {
     if (data === undefined) return;
     confirm()
@@ -53,20 +59,6 @@ const SurveyEditPanel: React.FC<IProps> = ({ onChange, data }) => {
       .catch(() => console.log('Cancel deletion'));
     handleMenuClose();
   };
-
-  // 新建问题用的Modal
-  const modal = useMemo(
-    () => (
-      <AddingModal
-        survey={data}
-        mode={addType}
-        open={modalOpen}
-        setOpen={setModalOpen}
-        onSave={onChange}
-      />
-    ),
-    [addType, data, modalOpen, onChange]
-  );
 
   return (
     <Box
@@ -86,6 +78,14 @@ const SurveyEditPanel: React.FC<IProps> = ({ onChange, data }) => {
           sx={{ width: '7rem' }}
         >
           添加组件
+        </Button>
+        <Button
+          color="success"
+          variant="outlined"
+          sx={{ ml: 4, width: '7rem' }}
+          onClick={handleEdit}
+        >
+          编辑页面
         </Button>
         <Button
           onClick={handleDelete}
@@ -115,7 +115,24 @@ const SurveyEditPanel: React.FC<IProps> = ({ onChange, data }) => {
           分页 Page
         </MenuItem>
       </Menu>
-      {modal}
+      {addingModalOpen && (
+        <AddingModal
+          survey={data}
+          mode={addType}
+          open={addingModalOpen}
+          setOpen={setAddingModalOpen}
+          onSave={onChange}
+        />
+      )}
+      {editingModalOpen && (
+        <GroupEditModal
+          data={data?.currentPage}
+          open={editingModalOpen}
+          onClose={() => setEditingModalOpen(false)}
+          onSave={onChange}
+          element="page"
+        />
+      )}
     </Box>
   );
 };
