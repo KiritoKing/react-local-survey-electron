@@ -60,9 +60,9 @@ export function getQuestionTypeNameCn(type: QuestionType | string) {
     case 'radiogroup':
       return '单项选择';
     case 'rating':
-      return '评分';
+      return '自定义打分';
     case 'ranking':
-      return '排名';
+      return '选项排序';
     case 'signaturepad':
       return '签名板';
     case 'text':
@@ -80,9 +80,15 @@ export const textQuestionTypes = ['text', 'comment'];
 
 export const wrapperTypes = ['panel'];
 
-export const selectorTypes = ['dropdown', 'tagbox', 'radiogroup', 'checkbox'];
+export const selectorTypes = [
+  'dropdown',
+  'tagbox',
+  'radiogroup',
+  'checkbox',
+  'ranking',
+];
 
-export const simpleSelectorTypes = ['boolean', 'rating', 'ranking'];
+export const simpleSelectorTypes = ['boolean', 'rating'];
 
 export const forbiddenTypes = [
   'expression',

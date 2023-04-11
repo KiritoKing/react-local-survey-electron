@@ -1,8 +1,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { Question } from 'survey-core';
+import { Question, QuestionRatingModel } from 'survey-core';
 import { QuestionType, selectorTypes } from '../QuestionEditPanel/typing';
 import ChoiceList from '../ChoiceList';
+import RatingEditor from '../RatingEditor';
 
 export interface IChoice {
   value: any;
@@ -28,6 +29,8 @@ const QuestionContentEditor: React.FC<IProps> = ({
 
   if (selectorTypes.includes(type))
     return <ChoiceList data={data} onUpdate={onUpdate} />;
+  if (type === 'rating')
+    return <RatingEditor data={data as QuestionRatingModel} />;
 
   return <div>该类型问题没有数据可以更改</div>;
 };

@@ -4,12 +4,14 @@ import React from 'react';
 interface ITextbox {
   name: string;
   displayName: string;
-  initValue?: string;
+  initValue?: any;
   // eslint-disable-next-line no-unused-vars
-  binding?: (val: string) => void;
+  binding?: (val: any) => void;
   sx?: SxProps;
   tooltip?: string;
   autoFocus?: boolean;
+  fullWidth?: boolean;
+  numeric?: boolean;
 }
 
 const PropertyEditor: React.FC<ITextbox> = ({
@@ -20,10 +22,12 @@ const PropertyEditor: React.FC<ITextbox> = ({
   sx,
   tooltip,
   autoFocus,
+  numeric,
+  fullWidth = true,
 }) => (
   <Box>
     <TextField
-      fullWidth
+      fullWidth={fullWidth}
       type="text"
       id={name}
       label={displayName}
@@ -32,6 +36,7 @@ const PropertyEditor: React.FC<ITextbox> = ({
       helperText={tooltip}
       sx={sx}
       autoFocus={autoFocus}
+      inputProps={numeric ? { inputMode: 'numeric', pattern: '[0-9]*' } : {}}
     />
   </Box>
 );
