@@ -27,7 +27,6 @@ const SettingsPage = () => {
     window.electron.ipcRenderer
       .invoke('get-config')
       .then((value: IConfig) => {
-        value.workFolder = value.workFolder.replace(/\\/g, '/');
         setOffline(value.offlineMode);
         setWordFolder(value.workFolder);
         setNeedPassword(value.needPassword);
@@ -59,6 +58,19 @@ const SettingsPage = () => {
     enqueueSnackbar('设置保存成功', { variant: 'success' });
   };
 
+  const handleWorkFolderChange = () => {
+    window.electron.ipcRenderer
+      .invoke('select-folder')
+      .then((value: string) => {
+        if (value) {
+          setWordFolder(value);
+          modified();
+        }
+        return true;
+      })
+      .catch(console.log);
+  };
+
   if (dataReady)
     return (
       <Box sx={{ padding: '1rem' }}>
@@ -70,7 +82,11 @@ const SettingsPage = () => {
                 value={workFolder}
                 inputProps={{ readOnly: true }}
               />
-              <Button variant="contained" sx={{ ml: 2, color: 'white' }}>
+              <Button
+                onClick={handleWorkFolderChange}
+                variant="contained"
+                sx={{ ml: 2, color: 'white' }}
+              >
                 更改
               </Button>
             </ConfigItem>

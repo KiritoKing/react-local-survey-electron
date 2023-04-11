@@ -12,7 +12,8 @@ export type Channels =
   | 'save-survey'
   | 'delete-survey'
   | 'get-config'
-  | 'save-config';
+  | 'save-config'
+  | 'select-folder';
 
 const electronHandler = {
   ipcRenderer: {

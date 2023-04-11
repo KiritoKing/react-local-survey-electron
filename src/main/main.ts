@@ -14,6 +14,7 @@ import saveSurveyHandler from './Handlers/SaveSurvey';
 import deleteSurveyHandler from './Handlers/DeleteSurvey';
 import getConfigHandler from './Handlers/GetConfig';
 import saveConfigHandler from './Handlers/SaveConfig';
+import selectFolderHandler from './Handlers/SelectFolder';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -104,6 +105,7 @@ app
     ipcMain.handle('open-folder', openFolderHandler);
     ipcMain.handle('get-result', getResultHandler);
     ipcMain.handle('get-config', getConfigHandler);
+    ipcMain.handle('select-folder', selectFolderHandler);
 
     ipcMain.on('save-result', saveResultHandler);
     ipcMain.on('export-result', exportResultHandler);
