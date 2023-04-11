@@ -1,60 +1,101 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Survey } from 'survey-react-ui';
-import { Model, Question } from 'survey-core';
+import { Model, IElement, Question } from 'survey-core';
 import { Box } from '@mui/material';
 import ReactDOM from 'react-dom';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import { ConfirmProvider } from 'material-ui-confirm';
 import { theme } from 'renderer/App';
 import QuestionEditPanel from '../QuestionEditPanel';
+import GroupEditPanel from '../GroupEditPanel';
 
 interface IProps {
   model: Model;
   onUpdate: () => void;
   // eslint-disable-next-line no-unused-vars
-  onDelete: (name: string) => void;
+  onDelete: (element: IElement) => void;
 }
 
 interface IContainer {
   dom: HTMLDivElement;
-  question: Question;
+  element: IElement;
   rendered: boolean;
 }
 
+const clearContainers = (
+  containers: IContainer[],
+  onAfterClear?: () => void
+) => {
+  containers.forEach((container) => {
+    ReactDOM.unmountComponentAtNode(container.dom);
+  });
+  onAfterClear?.();
+};
+
 // TODO: 右侧按钮随左侧内容全量刷新，考虑使用内部渲染方案
 const SurveyEditor: React.FC<IProps> = ({ model, onUpdate, onDelete }) => {
-  const [containers, setContainers] = useState<IContainer[]>([]);
-  const addContainer = (data: IContainer) => {
-    setContainers((prev) => [...prev, data]);
+  const [questions, setQuestions] = useState<IContainer[]>([]);
+  const [panels, setPanels] = useState<IContainer[]>([]);
+
+  const addQuestion = (data: IContainer) => {
+    setQuestions((prev) => [...prev, data]);
+  };
+  const addPanel = (data: IContainer) => {
+    setPanels((prev) => [...prev, data]);
   };
 
-  const renderHacker = useCallback((sender: Model, options: any) => {
-    console.log(`Hacking HtmlElement: ${options.htmlElement.id}`);
+  const handleRenderQuestion = useCallback((sender: Model, options: any) => {
+    console.log(`Hacking Button: ${options.htmlElement.id}`);
     const container = document.createElement('div');
     container.className = 'btn-container'; // 这个样式定义在App.css里
     const header = options.htmlElement;
     header.appendChild(container);
-    addContainer({
+    addQuestion({
       dom: container,
-      question: options.question,
+      element: options.question,
       rendered: false,
     });
   }, []);
 
+  const handleRenderPanel = useCallback((sender: Model, options: any) => {
+    console.log(`Hacking Panel: ${options.htmlElement.id}`);
+    const container = document.createElement('div');
+    container.style.width = 'auto';
+    container.className = 'panel-edit'; // 这个样式定义在App.css里
+
+    const dom = options.htmlElement as HTMLElement;
+    // 当Panel没有标题时，插入到第一个元素前
+    if (dom.childElementCount < 2) dom.insertBefore(container, dom.firstChild);
+    else {
+      const title = (options.htmlElement as HTMLElement)
+        .firstElementChild as HTMLElement;
+      if (!title) return;
+
+      title.appendChild(container);
+    }
+
+    addPanel({
+      dom: container,
+      element: options.question,
+      rendered: false,
+    });
+  }, []);
+
+  // Hook: 渲染操作按钮到问题元素内
   useEffect(() => {
     // eslint-disable-next-line no-plusplus
-    for (let i = 0; i < containers.length; i++) {
+    for (let i = 0; i < questions.length; i++) {
       // eslint-disable-next-line no-continue
-      if (containers[i].rendered) continue;
-      console.log(`Render buttons in Question[${containers[i].question.name}]`);
-      const container = containers[i];
-      const { dom, question } = container;
-      const deleteQuestionHanlder = () => onDelete(question.name);
+      if (questions[i].rendered) continue;
+      console.log(`Render buttons in Question[${questions[i].element.name}]`);
+      const container = questions[i];
+      const { dom, element: question } = container;
+      const deleteQuestionHanlder = () => onDelete(question);
       ReactDOM.render(
         <ThemeProvider theme={theme}>
           <ConfirmProvider>
             <QuestionEditPanel
-              data={question}
+              data={question as Question}
               onUpdate={onUpdate}
               onDelete={deleteQuestionHanlder}
             />
@@ -64,18 +105,35 @@ const SurveyEditor: React.FC<IProps> = ({ model, onUpdate, onDelete }) => {
       );
       container.rendered = true;
     }
-  }, [containers, onDelete, onUpdate]);
+  }, [questions, onDelete, onUpdate]);
 
-  // 在页面卸载时清空Container
+  // Hook: 渲染操作按钮到面板元素内
+  useEffect(() => {
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < panels.length; i++) {
+      // eslint-disable-next-line no-continue
+      if (panels[i].rendered) continue;
+      const container = panels[i];
+      const { dom, element: panel } = container;
+      const deletePanelHanlder = () => onDelete(panel);
+      ReactDOM.render(
+        <ThemeProvider theme={theme}>
+          <ConfirmProvider>
+            <GroupEditPanel />
+          </ConfirmProvider>
+        </ThemeProvider>,
+        dom
+      );
+      container.rendered = true;
+    }
+  }, [panels, onDelete, onUpdate]);
+
+  // Hook: 在页面卸载时清空所有Container
   useEffect(
     () => () => {
       console.log(`Unmounting SurveyEditor and delete all containers`);
-      // eslint-disable-next-line no-plusplus
-      for (let i = 0; i < containers.length; i++) {
-        const container = containers[i];
-        ReactDOM.unmountComponentAtNode(container.dom);
-      }
-      setContainers([]);
+      clearContainers(questions, () => setQuestions([]));
+      clearContainers(panels, () => setPanels([]));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [model.currentPageNo]
@@ -86,13 +144,14 @@ const SurveyEditor: React.FC<IProps> = ({ model, onUpdate, onDelete }) => {
     return (
       model && (
         <Survey
-          onAfterRenderQuestion={renderHacker}
+          onAfterRenderQuestion={handleRenderQuestion}
+          onAfterRenderPanel={handleRenderPanel}
           model={model}
           mode="display"
         />
       )
     );
-  }, [model, renderHacker]);
+  }, [model, handleRenderQuestion, handleRenderPanel]);
 
   return (
     <Box

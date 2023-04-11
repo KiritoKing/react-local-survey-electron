@@ -5,7 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ErrorInfo from 'renderer/Components/ErrorInfo';
 import useSurvey from 'renderer/Hooks/useSurvey';
-import { Model, PanelModel, PageModel } from 'survey-core';
+import { Model, PanelModel, PageModel, IElement } from 'survey-core';
 import SurveyEditor from 'renderer/Components/SurveyEditor';
 import MetaEditor from 'renderer/Components/MetaEditor';
 import SurveyEditPanel from 'renderer/Components/SurveyEditPanel';
@@ -64,14 +64,13 @@ function EditorPage() {
     [survey, clearEmptyGroups, data, enqueueSnackbar]
   );
 
-  const handleDeleteQuestion = useCallback(
-    (name: string) => {
+  const handleDeleteElement = useCallback(
+    (element: IElement) => {
       if (survey && data) {
         const model = data;
-        const question = model.getQuestionByName(name);
-        if (question === undefined) return;
-        const { parent } = question;
-        parent.removeElement(question);
+        const { parent } = element;
+        if (parent === null) return;
+        parent.removeElement(element);
         setData(model);
       }
     },
@@ -96,11 +95,11 @@ function EditorPage() {
         <SurveyEditor
           model={data}
           onUpdate={handleRefreshSurvey}
-          onDelete={handleDeleteQuestion}
+          onDelete={handleDeleteElement}
         />
       </Box>
     );
-  }, [survey, data, handleSave, handleRefreshSurvey, handleDeleteQuestion]);
+  }, [survey, data, handleSave, handleRefreshSurvey, handleDeleteElement]);
 
   return page;
 }
