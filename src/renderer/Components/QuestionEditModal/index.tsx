@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -74,6 +74,7 @@ const QuestionEditModal: React.FC<IProps> = ({
           initValue={name}
           binding={setName}
           tooltip="问题标识符是问题的唯一标识，不可重复，导出时将作为表头。"
+          autoFocus
         />
         <PropertyEditor
           name="title"

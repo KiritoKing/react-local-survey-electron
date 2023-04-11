@@ -64,6 +64,7 @@ const SurveyEditor: React.FC<IProps> = ({ model, onUpdate, onDelete }) => {
     container.className = 'panel-edit'; // 这个样式定义在App.css里
 
     const dom = options.htmlElement as HTMLElement;
+    if (dom.querySelector('.panel-edit')) return; // 如果已经有面板了就不再重复渲染
     // 当Panel没有标题时，插入到第一个元素前
     if (dom.childElementCount < 2) dom.insertBefore(container, dom.firstChild);
     else {
@@ -120,7 +121,11 @@ const SurveyEditor: React.FC<IProps> = ({ model, onUpdate, onDelete }) => {
       ReactDOM.render(
         <ThemeProvider theme={theme}>
           <ConfirmProvider>
-            <GroupEditPanel />
+            <GroupEditPanel
+              data={panel as PanelModel}
+              onUpdate={onUpdate}
+              onDelete={deletePanelHanlder}
+            />
           </ConfirmProvider>
         </ThemeProvider>,
         dom

@@ -82,6 +82,7 @@ const GroupEditModal: React.FC<IProps> = ({
           initValue={name}
           binding={setName}
           tooltip="标识符是唯一标识，不可重复。"
+          autoFocus
         />
         <PropertyEditor
           name="title"
@@ -92,11 +93,13 @@ const GroupEditModal: React.FC<IProps> = ({
           tooltip="标题是分组/页面的显示名称"
         />
       </ModalSection>
-      <ModalSection last>
-        <Typography color="red">
-          注意：为了显示群组，需要在添加群组完成后立刻添加一个问题
-        </Typography>
-      </ModalSection>
+      {data === undefined && (
+        <ModalSection last>
+          <Typography color="red">
+            注意：为了显示群组，需要在添加群组完成后立刻添加一个问题
+          </Typography>
+        </ModalSection>
+      )}
       <DialogActions sx={{ padding: 2 }}>
         <Button
           variant="contained"

@@ -9,6 +9,7 @@ interface ITextbox {
   binding?: (val: string) => void;
   sx?: SxProps;
   tooltip?: string;
+  autoFocus?: boolean;
 }
 
 const PropertyEditor: React.FC<ITextbox> = ({
@@ -18,6 +19,7 @@ const PropertyEditor: React.FC<ITextbox> = ({
   binding,
   sx,
   tooltip,
+  autoFocus,
 }) => (
   <Box>
     <TextField
@@ -29,6 +31,7 @@ const PropertyEditor: React.FC<ITextbox> = ({
       onChange={(e) => binding && binding(e.target.value)}
       helperText={tooltip}
       sx={sx}
+      autoFocus={autoFocus}
     />
   </Box>
 );
