@@ -14,7 +14,7 @@ import { RouterProvider, createHashRouter } from 'react-router-dom';
 import { ConfirmProvider } from 'material-ui-confirm';
 import { SnackbarProvider, closeSnackbar, SnackbarKey } from 'notistack';
 import CloseIcon from '@mui/icons-material/Close';
-import PageFrame from './Components/PageFrame';
+import Layout from './Components/Layout';
 import CompletePage from './Pages/Completion';
 import EditorPage from './Pages/Editor';
 import Home from './Pages/Home';
@@ -84,7 +84,7 @@ export const routes: IRoute[] = [
 const router = createHashRouter([
   {
     path: '/',
-    element: <PageFrame />,
+    element: <Layout />,
     errorElement: <ErrorInfo message="遇到了未知错误" enableBack />,
     children: routes.map((route) => ({
       index: route.path === '/',

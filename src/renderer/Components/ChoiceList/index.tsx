@@ -14,9 +14,9 @@ interface IProps {
 }
 
 const ChoiceList: React.FC<IProps> = ({ data, onUpdate }) => {
-  const base = data as QuestionSelectBase;
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [choices, setChoices] = useState(base?.choices ?? []);
+  const [choices, setChoices] = useState(
+    (data as QuestionSelectBase)?.choices ?? []
+  );
 
   const handleChange = (index: number, value: IChoice) => {
     const newChoices = [...choices];
@@ -71,6 +71,7 @@ const ChoiceList: React.FC<IProps> = ({ data, onUpdate }) => {
         pattern="Stack"
         itemSource={choices}
         template={choiceTemplate}
+        mt="0.5rem"
       />
       <ListFooter onClick={handleAdd} />
     </Box>

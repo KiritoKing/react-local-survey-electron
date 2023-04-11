@@ -30,18 +30,6 @@ const QuestionEditModal: React.FC<IProps> = ({
   onSave,
   container,
 }) => {
-  const isCreating = useMemo(
-    () => data === undefined && container,
-    [data, container]
-  );
-  useEffect(() => {
-    if (isCreating) {
-      if (container === undefined)
-        console.log('[Editing Modal] Warning: container is undefined');
-      else console.log('[Question Edit Model] Creating Mode');
-    }
-  }, [container, isCreating]);
-
   const [name, setName] = useState(data?.name ?? '');
   const [title, setTitle] = useState(data?.title ?? '');
   const [type, setType] = useState(data?.getType() ?? allQuestionTypes[0]);

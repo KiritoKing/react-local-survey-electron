@@ -20,12 +20,15 @@ const CreateSuveyModal: React.FC<IProps> = ({
   setResult,
 }) => {
   const [name, setName] = useState('新问卷');
+
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
   };
+
   const handleFinish = (str: string) => {
     if (setResult) setResult(str);
   };
+
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>输入问卷名</DialogTitle>

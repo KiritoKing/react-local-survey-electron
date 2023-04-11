@@ -7,7 +7,7 @@ import styles from './styles.module.scss';
 import { routes } from '../../App';
 
 // eslint-disable-next-line react/function-component-definition
-const PageFrame: React.FC = () => {
+const Layout: React.FC = () => {
   const loc = useLocation();
   const currentOutlet = useOutlet();
   const { nodeRef } = routes.find((route) => route.path === loc.pathname) ?? {};
@@ -35,4 +35,4 @@ const PageFrame: React.FC = () => {
   );
 };
 
-export default PageFrame;
+export default Layout;

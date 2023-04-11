@@ -27,7 +27,6 @@ const QuestionContentEditor: React.FC<IProps> = ({
   if (type === undefined) return null; // 如果既没有数据 又没有新建类型，那么就不渲染
 
   if (selectorTypes.includes(type))
-    // 选择题编辑器
     return <ChoiceList data={data} onUpdate={onUpdate} />;
 
   return <div>该类型问题没有数据可以更改</div>;
