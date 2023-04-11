@@ -1,3 +1,4 @@
+/* eslint-disable no-continue */
 import path from 'path';
 import { existsSync, readdirSync, readFileSync, writeFileSync } from 'fs';
 import xlsx from 'node-xlsx';
@@ -28,17 +29,20 @@ const exportResultHandler: ipcHanlder = async (event, args) => {
   });
   if (canceled || !savePath) return;
 
+  // 找到存储结果的目录
   const dirPath = path.join(config.workFolder, 'results', surveyId);
   if (!existsSync(dirPath)) return;
 
   const table = [];
   const filePaths = readdirSync(dirPath);
-  for (let i = 0; i < filePaths.length - 1; i += 1) {
+  console.log(`Found ${filePaths.length - 1} files.`);
+
+  for (let i = 0; i < filePaths.length; i += 1) {
+    if (!filePaths[i].endsWith('.json')) continue;
+    if (filePaths[i] === 'cache.json') continue;
     const textFile = readFileSync(path.join(dirPath, filePaths[i]), 'utf-8');
     const data = JSON.parse(textFile) as IResult;
-    // eslint-disable-next-line no-continue
     if (!data.data) continue;
-    console.log(JSON.stringify(data.data));
     if (table.length === 0) table.push(Object.keys(data.data));
     table.push(Object.values(data.data));
   }

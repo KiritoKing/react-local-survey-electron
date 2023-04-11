@@ -23,29 +23,29 @@ const RatingEditor: React.FC<IProps> = ({ data, onUpdate }) => {
   );
 
   useEffect(() => {
-    const rates: number[] = [];
-    // eslint-disable-next-line no-plusplus
-    for (let i = 1; i <= maxRate; i++) {
-      rates.push(i);
-    }
-    const info: IRating = {
-      minRateDescription: minText,
-      maxRateDescription: maxText,
-      rates,
-    };
-
-    if (data !== undefined) {
-      console.log(`Update rating data: ${data.name}`);
-      data.minRateDescription = minText ?? '';
-      data.maxRateDescription = maxText ?? '';
-      data.rateMax = maxRate;
-      data.rateValues = rates;
-    }
-    // eslint-disable-next-line consistent-return
     return () => {
+      const rates: number[] = [];
+      // eslint-disable-next-line no-plusplus
+      for (let i = 1; i <= maxRate; i++) {
+        rates.push(i);
+      }
+      const info: IRating = {
+        minRateDescription: minText,
+        maxRateDescription: maxText,
+        rates,
+      };
+
+      if (data !== undefined) {
+        console.log(`Update rating data: ${data.name}`);
+        data.minRateDescription = minText ?? '';
+        data.maxRateDescription = maxText ?? '';
+        data.rateMax = maxRate;
+        data.rateValues = rates;
+      }
       onUpdate?.(info);
     };
-  }, [data, maxRate, maxText, minText, onUpdate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Box>
