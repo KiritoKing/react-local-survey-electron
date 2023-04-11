@@ -22,8 +22,9 @@ const RatingEditor: React.FC<IProps> = ({ data, onUpdate }) => {
     data?.rateMax ?? data?.rateValues.length ?? 5
   );
 
-  useEffect(() => {
-    return () => {
+  // Hook: 在Editor内部更新后实时刷新页面数据
+  useEffect(
+    () => {
       const rates: number[] = [];
       // eslint-disable-next-line no-plusplus
       for (let i = 1; i <= maxRate; i++) {
@@ -43,9 +44,10 @@ const RatingEditor: React.FC<IProps> = ({ data, onUpdate }) => {
         data.rateValues = rates;
       }
       onUpdate?.(info);
-    };
+    },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    [minText, maxText, maxRate]
+  );
 
   return (
     <Box>
