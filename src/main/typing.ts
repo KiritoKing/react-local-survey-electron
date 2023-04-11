@@ -23,6 +23,7 @@ export interface IConfig {
   workFolder: string;
   needPassword: boolean;
   password?: string;
+  userName?: string;
 }
 
 export interface ipcHanlder {

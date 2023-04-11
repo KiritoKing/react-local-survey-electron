@@ -3,7 +3,7 @@ import React from 'react';
 
 interface ITextbox {
   name: string;
-  displayName: string;
+  displayName?: string;
   initValue?: any;
   // eslint-disable-next-line no-unused-vars
   binding?: (val: any) => void;

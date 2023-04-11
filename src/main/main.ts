@@ -13,6 +13,7 @@ import clearResultHandler from './Handlers/ClearResult';
 import saveSurveyHandler from './Handlers/SaveSurvey';
 import deleteSurveyHandler from './Handlers/DeleteSurvey';
 import getConfigHandler from './Handlers/GetConfig';
+import saveConfigHandler from './Handlers/SaveConfig';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -109,6 +110,7 @@ app
     ipcMain.on('clear-result', clearResultHandler);
     ipcMain.on('save-survey', saveSurveyHandler);
     ipcMain.on('delete-survey', deleteSurveyHandler);
+    ipcMain.on('save-config', saveConfigHandler);
 
     // eslint-disable-next-line promise/always-return
     if (process.env.NODE_ENV === 'production') {

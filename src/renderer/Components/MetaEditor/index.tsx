@@ -1,8 +1,9 @@
-import { Paper, Typography, Box, Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { ISurveyCache } from 'main/typing';
 
 import React, { useEffect, useState } from 'react';
 import useModifiedStatus from 'renderer/Hooks/useModifiedStatus';
+import PaperSection from '../PaperSection';
 import PropertyEditor from '../PropertyEditor';
 
 interface IProps {
@@ -34,10 +35,7 @@ const MetaEditor: React.FC<IProps> = ({ data, onSave }) => {
   };
 
   return (
-    <Paper sx={{ padding: '3rem 3rem' }} elevation={3}>
-      <Typography variant="h5" marginBottom={3}>
-        <b>元数据修改</b>
-      </Typography>
+    <PaperSection title="元数据修改" sx={{ padding: '3rem 3rem' }}>
       <PropertyEditor
         name="name"
         displayName="问卷名"
@@ -67,7 +65,7 @@ const MetaEditor: React.FC<IProps> = ({ data, onSave }) => {
           保存全部更改
         </Button>
       </Box>
-    </Paper>
+    </PaperSection>
   );
 };
 
