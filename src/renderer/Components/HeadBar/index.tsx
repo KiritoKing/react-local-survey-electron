@@ -33,6 +33,7 @@ const HeadBar: React.FC<{ onPageChange?: () => Promise<boolean> }> = ({
   };
 
   const handleSettings = () => {
+    if (loc.pathname === '/settings') return;
     onPageChange?.()
       .then((result) => {
         result && nav('/settings');

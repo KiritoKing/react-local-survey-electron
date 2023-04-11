@@ -1,11 +1,10 @@
-import { Box, Switch, Tooltip } from '@mui/material';
+import { Box, Switch } from '@mui/material';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { IConfig } from 'main/typing';
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import ConfigItem from 'renderer/Components/ConfigItem';
 import PaperSection from 'renderer/Components/PaperSection';
