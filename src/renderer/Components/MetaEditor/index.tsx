@@ -2,6 +2,7 @@ import { Paper, Typography, Box, Button } from '@mui/material';
 import { ISurveyCache } from 'main/typing';
 
 import React, { useEffect, useState } from 'react';
+import useModifiedStatus from 'renderer/Hooks/useModifiedStatus';
 import PropertyEditor from '../PropertyEditor';
 
 interface IProps {
@@ -13,6 +14,7 @@ interface IProps {
 const MetaEditor: React.FC<IProps> = ({ data, onSave }) => {
   const [surveyName, setSurveyName] = useState<string>();
   const [author, setAuthor] = useState<string>();
+  const [modified] = useModifiedStatus();
 
   // Hook: 在data更新时刷新视图
   useEffect(() => {
@@ -20,6 +22,7 @@ const MetaEditor: React.FC<IProps> = ({ data, onSave }) => {
       console.log(`[Meta Editor] Got meta data updated`);
       setSurveyName(data.name);
       setAuthor(data.creator);
+      modified();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.name, data?.creator]);

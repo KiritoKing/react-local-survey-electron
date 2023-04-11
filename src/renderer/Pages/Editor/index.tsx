@@ -9,18 +9,21 @@ import { Model, PanelModel, PageModel, IElement } from 'survey-core';
 import SurveyEditor from 'renderer/Components/SurveyEditor';
 import MetaEditor from 'renderer/Components/MetaEditor';
 import SurveyEditPanel from 'renderer/Components/SurveyEditPanel';
+import useModifiedStatus from 'renderer/Hooks/useModifiedStatus';
 
 function EditorPage() {
   const { enqueueSnackbar } = useSnackbar();
   const { surveyId } = useParams();
   const survey = useSurvey(surveyId);
+  const [modified, saved] = useModifiedStatus();
 
   const [data, setData] = useState<Model>();
 
   const handleRefreshSurvey = useCallback(() => {
-    enqueueSnackbar('改动保存成功', { preventDuplicate: true });
+    modified();
+    enqueueSnackbar('应用改动成功（未保存到文件）', { preventDuplicate: true });
     setData(data);
-  }, [data, enqueueSnackbar]);
+  }, [data, enqueueSnackbar, modified]);
 
   useEffect(() => {
     if (survey !== undefined) {
@@ -60,8 +63,9 @@ function EditorPage() {
       survey.lastModified = dayjs().valueOf();
       window.electron.ipcRenderer.sendMessage('save-survey', [survey]);
       enqueueSnackbar('问卷保存成功', { variant: 'success' });
+      saved();
     },
-    [survey, clearEmptyGroups, data, enqueueSnackbar]
+    [survey, clearEmptyGroups, data, enqueueSnackbar, saved]
   );
 
   const handleDeleteElement = useCallback(

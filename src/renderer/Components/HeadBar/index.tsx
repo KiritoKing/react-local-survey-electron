@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import React, { useContext } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -13,7 +13,9 @@ import { useSnackbar } from 'notistack';
 import TopIconButton from './TopIconButton';
 import styles from './styles.module.scss';
 
-function HeadBar() {
+const HeadBar: React.FC<{ onPageChange?: () => Promise<boolean> }> = ({
+  onPageChange,
+}) => {
   const nav = useNavigate();
   const loc = useLocation();
   const { enqueueSnackbar } = useSnackbar();
@@ -22,19 +24,29 @@ function HeadBar() {
   const title = useTitle(loc.pathname);
 
   const handleBack = () => {
-    nav('/');
+    onPageChange?.()
+      .then((result) => {
+        result && nav('/');
+        return null;
+      })
+      .catch(console.log);
+  };
+
+  const handleSettings = () => {
+    onPageChange?.()
+      .then((result) => {
+        result && nav('/settings');
+        return null;
+      })
+      .catch(console.log);
   };
 
   const handleRefresh = () => {
     refreshHandler();
-    enqueueSnackbar('成功读取文件刷新列表', {
+    enqueueSnackbar('成功刷新文件列表', {
       variant: 'success',
       preventDuplicate: true,
     });
-  };
-
-  const handleSettings = () => {
-    nav('/settings');
   };
 
   return (
@@ -73,6 +85,6 @@ function HeadBar() {
       </AppBar>
     </Box>
   );
-}
+};
 
 export default HeadBar;
