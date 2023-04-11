@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Survey } from 'survey-react-ui';
-import { Model, IElement, Question } from 'survey-core';
+import { Model, IElement, Question, PanelModel } from 'survey-core';
 import { Box } from '@mui/material';
 import ReactDOM from 'react-dom';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
@@ -76,7 +76,7 @@ const SurveyEditor: React.FC<IProps> = ({ model, onUpdate, onDelete }) => {
 
     addPanel({
       dom: container,
-      element: options.question,
+      element: options.panel,
       rendered: false,
     });
   }, []);
@@ -115,6 +115,7 @@ const SurveyEditor: React.FC<IProps> = ({ model, onUpdate, onDelete }) => {
       if (panels[i].rendered) continue;
       const container = panels[i];
       const { dom, element: panel } = container;
+      console.log(`Render buttons in Panel[${panel.name}]`);
       const deletePanelHanlder = () => onDelete(panel);
       ReactDOM.render(
         <ThemeProvider theme={theme}>

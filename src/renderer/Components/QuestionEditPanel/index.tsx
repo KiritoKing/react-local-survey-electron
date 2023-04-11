@@ -9,28 +9,31 @@ import { useConfirm } from 'material-ui-confirm';
 import { getQuestionTypeCn } from './typing';
 import QuestionEditModal from '../QuestionEditModal';
 
-const tooltipText = (q: Question) => (
-  <>
-    <Typography>
-      <i>ID：</i>
-      {q.id}
-    </Typography>
-    <Typography>
-      <i>问题类型：</i>
-      {getQuestionTypeCn(q)}
-    </Typography>
-    <Typography>
-      <i>标识符：</i>
-      {q.name}
-    </Typography>
-
-    {q.isRequired && (
+const tooltipText = (q?: Question) => {
+  if (q === undefined) return null;
+  return (
+    <>
       <Typography>
-        <b>*必填选项</b>
+        <i>ID：</i>
+        {q.id}
       </Typography>
-    )}
-  </>
-);
+      <Typography>
+        <i>问题类型：</i>
+        {getQuestionTypeCn(q)}
+      </Typography>
+      <Typography>
+        <i>标识符：</i>
+        {q.name}
+      </Typography>
+
+      {q?.isRequired && (
+        <Typography>
+          <b>*必填选项</b>
+        </Typography>
+      )}
+    </>
+  );
+};
 
 interface IProps {
   data: Question;
@@ -86,14 +89,16 @@ const QuestionEditPanel: React.FC<IProps> = ({ data, onUpdate, onDelete }) => {
         </Button>
       </Box>
       <Tooltip title={tooltipText(data)} placement="left-end">
-        <InfoOutlinedIcon color={data.isRequired ? 'success' : 'inherit'} />
+        <InfoOutlinedIcon color={data?.isRequired ? 'primary' : 'inherit'} />
       </Tooltip>
-      <QuestionEditModal
-        open={editModalOpen}
-        data={data}
-        onClose={handleModalClose}
-        onSave={onUpdate}
-      />
+      {data && editModalOpen === true && (
+        <QuestionEditModal
+          open={editModalOpen}
+          data={data}
+          onClose={handleModalClose}
+          onSave={onUpdate}
+        />
+      )}
     </Box>
   );
 };

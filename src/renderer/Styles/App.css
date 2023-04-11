@@ -21,3 +21,8 @@
 .btn-container {
   margin-top: 2rem;
 }
+
+.panel-edit {
+  padding-top: 1rem;
+  margin-left: -1rem;
+}
