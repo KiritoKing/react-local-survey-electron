@@ -86,7 +86,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
-    "@mui/icons-material": "^5.11.11",
+    "@mui/icons-material": "^5.11 .11",
     "@mui/material": "^5.11.14",
     "@reduxjs/toolkit": "^1.9.3",
     "@types/react-beautiful-dnd": "^13.1.4",
