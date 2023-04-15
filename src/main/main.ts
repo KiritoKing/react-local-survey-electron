@@ -3,7 +3,7 @@
 
 import path from 'path';
 import { app, BrowserWindow, ipcMain, Menu } from 'electron';
-import { resolveHtmlPath } from './util';
+import { getConfig, resolveHtmlPath } from './util';
 import importFileHandler from './Handlers/ImportFile';
 import openFolderHandler from './Handlers/OpenFolder';
 import saveResultHandler from './Handlers/SaveResultHandler';
@@ -61,6 +61,7 @@ const createWindow = async () => {
         ? path.join(__dirname, 'preload.js')
         : path.join(__dirname, '../../.erb/dll/preload.js'),
     },
+    // frame: isDebug,
   });
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
@@ -74,6 +75,8 @@ const createWindow = async () => {
     } else {
       mainWindow.show();
     }
+    const title = getConfig()?.title;
+    if (title) mainWindow.title = title;
   });
 
   mainWindow.on('closed', () => {
@@ -121,3 +124,10 @@ app
     }
   })
   .catch(console.log);
+
+// eslint-disable-next-line import/prefer-default-export
+export const setWindowTitle = (title: string) => {
+  if (mainWindow) {
+    mainWindow.setTitle(title);
+  }
+};

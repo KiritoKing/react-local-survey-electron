@@ -2,5 +2,10 @@
   user-select: none;
   -webkit-user-select: none;
   max-height: 60px;
-  // -webkit-app-region: drag;
+  -webkit-app-region: drag !important;
 }
+
+// .titleBar button,
+// .titleBar a {
+//   -webkit-app-region: no-drag;
+// }
