@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { createTheme, IconButton } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
-import { ISurveyCache } from 'main/typing';
+import { IConfig, ISurveyCache } from 'main/typing';
 import React, {
   createContext,
   createRef,
@@ -45,7 +45,7 @@ interface IRoute {
 export const routes: IRoute[] = [
   {
     path: '/',
-    title: '心理测评系统',
+    title: '全部问卷',
     element: <Home />,
     nodeRef: createRef(),
   },
@@ -94,10 +94,18 @@ const router = createHashRouter([
   },
 ]);
 
-export const SurveyListContext = createContext<{
-  data: ISurveyCache[] | undefined;
-  refreshHandler: () => void;
-}>(undefined as any);
+export interface DispatchContext<T> {
+  data?: T;
+  refresh: () => void;
+}
+
+export const SurveyListContext = createContext<DispatchContext<ISurveyCache[]>>(
+  undefined as any
+);
+
+export const ConfigContext = createContext<DispatchContext<IConfig>>(
+  undefined as any
+);
 
 function sortSurveysByTime(surveys: ISurveyCache[]) {
   const sorter = (a: ISurveyCache, b: ISurveyCache) => {
@@ -111,6 +119,8 @@ function sortSurveysByTime(surveys: ISurveyCache[]) {
 
 export default function App() {
   const [surveyCache, setSurveyCache] = useState<ISurveyCache[]>();
+  const [config, setConfig] = useState<IConfig>();
+
   const updateFromFiles = useCallback(() => {
     console.log('Read from file');
     window.electron.ipcRenderer
@@ -126,23 +136,43 @@ export default function App() {
       .catch(console.log);
   }, []);
 
+  const loadConfigFromFile = useCallback(() => {
+    console.log('Read config from file');
+    window.electron.ipcRenderer
+      .invoke('get-config')
+      .then((data) => {
+        setConfig(data);
+        return null;
+      })
+      .catch(console.log);
+  }, []);
+
   // 初始化页面时，从本地缓存中读取数据
   useEffect(() => {
-    const cache = window.localStorage.getItem('surveyCache');
-    console.log('Init list');
-    if (cache) {
+    const slCache = window.localStorage.getItem('surveyCache');
+    if (slCache) {
       console.log('Read from local storage');
-      setSurveyCache(sortSurveysByTime(JSON.parse(cache) as ISurveyCache[]));
+      setSurveyCache(sortSurveysByTime(JSON.parse(slCache) as ISurveyCache[]));
     } else {
       updateFromFiles();
+    }
+    const cfCache = window.localStorage.getItem('configCache');
+    if (cfCache) {
+      console.log('Read config from local storage');
+      setConfig(JSON.parse(cfCache) as IConfig);
+    } else {
+      loadConfigFromFile();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 使用useMemo来防止每次传递都刷新
-  const contextData = useMemo(() => {
-    return { data: surveyCache, refreshHandler: updateFromFiles };
+  const slContextData: DispatchContext<ISurveyCache[]> = useMemo(() => {
+    return { data: surveyCache, refresh: updateFromFiles };
   }, [surveyCache, updateFromFiles]);
+  const cfContextData: DispatchContext<IConfig> = useMemo(() => {
+    return { data: config, refresh: loadConfigFromFile };
+  }, [config, loadConfigFromFile]);
 
   const snackBarButton = (id: SnackbarKey) => (
     <IconButton onClick={() => closeSnackbar(id)}>
@@ -151,18 +181,20 @@ export default function App() {
   );
 
   return (
-    <SurveyListContext.Provider value={contextData}>
-      <ThemeProvider theme={theme}>
-        <ConfirmProvider>
-          <SnackbarProvider
-            maxSnack={3}
-            autoHideDuration={2000}
-            action={(snackBarId) => snackBarButton(snackBarId)}
-          >
-            <RouterProvider fallbackElement={<Home />} router={router} />
-          </SnackbarProvider>
-        </ConfirmProvider>
-      </ThemeProvider>
+    <SurveyListContext.Provider value={slContextData}>
+      <ConfigContext.Provider value={cfContextData}>
+        <ThemeProvider theme={theme}>
+          <ConfirmProvider>
+            <SnackbarProvider
+              maxSnack={3}
+              autoHideDuration={2000}
+              action={(snackBarId) => snackBarButton(snackBarId)}
+            >
+              <RouterProvider fallbackElement={<Home />} router={router} />
+            </SnackbarProvider>
+          </ConfirmProvider>
+        </ThemeProvider>
+      </ConfigContext.Provider>
     </SurveyListContext.Provider>
   );
 }

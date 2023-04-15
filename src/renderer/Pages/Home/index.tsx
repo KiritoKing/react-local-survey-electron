@@ -17,7 +17,7 @@ function Home() {
   const nav = useNavigate();
   const dataContext = useContext(SurveyListContext) as any;
   const surveyCache = dataContext.data as ISurveyCache[];
-  const refreshSurveys = useContext(SurveyListContext).refreshHandler;
+  const refreshSurveys = useContext(SurveyListContext).refresh;
   const { enqueueSnackbar } = useSnackbar();
 
   const [dialogOpen, setDialogOpen] = useState(false);

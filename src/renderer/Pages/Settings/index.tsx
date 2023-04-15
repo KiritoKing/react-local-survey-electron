@@ -4,12 +4,13 @@ import List from '@mui/material/List';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { IConfig } from 'main/typing';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import ConfigItem from 'renderer/Components/ConfigItem';
 import PaperSection from 'renderer/Components/PaperSection';
 import PropertyEditor from 'renderer/Components/PropertyEditor';
 import useModifiedStatus from 'renderer/Hooks/useModifiedStatus';
+import { ConfigContext } from 'renderer/App';
 
 const SettingsPage = () => {
   const [dataReady, setDataReady] = useState<boolean>(false);
@@ -19,19 +20,23 @@ const SettingsPage = () => {
   const [needPassword, setNeedPassword] = useState<boolean>();
   const [password, setPassword] = useState<string>();
   const [userName, setUserName] = useState<string>();
+  const [windowTitle, setWindowTitle] = useState<string>();
   const { enqueueSnackbar } = useSnackbar();
   const [modified, saved] = useModifiedStatus();
+  const { refresh } = useContext(ConfigContext);
 
   // Hook: 首次加载时从文件读取配置
   useEffect(() => {
     window.electron.ipcRenderer
       .invoke('get-config')
       .then((value: IConfig) => {
+        window.localStorage.setItem('configCache', JSON.stringify(value));
         setOffline(value.offlineMode);
         setWordFolder(value.workFolder);
         setNeedPassword(value.needPassword);
         setPassword(value.password);
         setUserName(value.userName);
+        setWindowTitle(value.title);
         setDataReady(true);
         modified();
         return true;
@@ -52,8 +57,10 @@ const SettingsPage = () => {
       needPassword,
       password,
       userName,
+      title: windowTitle !== '' ? windowTitle : undefined,
     };
     window.electron.ipcRenderer.sendMessage('save-config', [newConfig]);
+    refresh();
     saved();
     enqueueSnackbar('设置保存成功', { variant: 'success' });
   };
@@ -89,6 +96,14 @@ const SettingsPage = () => {
               >
                 更改
               </Button>
+            </ConfigItem>
+            <ConfigItem title="窗口标题" fullWidth>
+              <PropertyEditor
+                name="title"
+                initValue={windowTitle}
+                binding={setWindowTitle}
+                fullWidth
+              />
             </ConfigItem>
             <ConfigItem title="离线模式">
               <Switch disabled checked={offline} />

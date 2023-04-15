@@ -14,7 +14,7 @@ interface IProps {
 
 const SurveyList: React.FC<IProps> = ({ data, onFail }) => {
   const nav = useNavigate();
-  const refreshSurveys = useContext(SurveyListContext).refreshHandler;
+  const refreshSurveys = useContext(SurveyListContext).refresh;
   const deleteConfirm = useDeleteConfirm(
     '删除问卷',
     `你确定要删除问卷吗？这将永久清除该问卷和其结果，且不可恢复！`

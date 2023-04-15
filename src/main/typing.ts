@@ -24,6 +24,7 @@ export interface IConfig {
   needPassword: boolean;
   password?: string;
   userName?: string;
+  title?: string;
 }
 
 export interface ipcHanlder {

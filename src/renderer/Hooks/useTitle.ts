@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { routes, SurveyListContext } from 'renderer/App';
+import { ConfigContext, routes, SurveyListContext } from 'renderer/App';
 
 const needSurveyName = ['survey', 'results', 'editor'];
 
@@ -7,10 +7,17 @@ const needSurveyName = ['survey', 'results', 'editor'];
 function useTitle(url: string) {
   const paths = url.split('/');
   const { data: surveys } = useContext(SurveyListContext);
+  const { data: config } = useContext(ConfigContext);
   const title: string = useMemo(() => {
     for (let i = 0; i < routes.length; i += 1) {
       const routePaths = routes[i].path.split('/');
       if (routePaths[1] === paths[1] && surveys !== undefined) {
+        if (paths[1] === '' && config?.title !== undefined) {
+          console.log(
+            `Config Detected, index title has been set as ${routes[i].title}`
+          );
+          return config.title;
+        }
         console.log(`Route title has been set as ${routes[i].title}`);
         // 需要显示问卷名的页面
         if (needSurveyName.includes(paths[1])) {
@@ -22,7 +29,7 @@ function useTitle(url: string) {
       }
     }
     return routes[0].title;
-  }, [paths, surveys]);
+  }, [config?.title, paths, surveys]);
 
   return title;
 }

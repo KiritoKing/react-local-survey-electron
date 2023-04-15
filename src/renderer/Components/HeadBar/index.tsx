@@ -19,7 +19,7 @@ const HeadBar: React.FC<{ onPageChange?: () => Promise<boolean> }> = ({
   const nav = useNavigate();
   const loc = useLocation();
   const { enqueueSnackbar } = useSnackbar();
-  const { refreshHandler } = useContext(SurveyListContext);
+  const { refresh } = useContext(SurveyListContext);
 
   const title = useTitle(loc.pathname);
 
@@ -43,7 +43,7 @@ const HeadBar: React.FC<{ onPageChange?: () => Promise<boolean> }> = ({
   };
 
   const handleRefresh = () => {
-    refreshHandler();
+    refresh();
     enqueueSnackbar('成功刷新文件列表', {
       variant: 'success',
       preventDuplicate: true,
