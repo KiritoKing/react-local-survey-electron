@@ -27,6 +27,7 @@ const SettingsPage = () => {
 
   // Hook: 首次加载时从文件读取配置
   useEffect(() => {
+    console.log('Read config from file.');
     window.electron.ipcRenderer
       .invoke('get-config')
       .then((value: IConfig) => {
@@ -57,7 +58,7 @@ const SettingsPage = () => {
       needPassword,
       password,
       userName,
-      title: windowTitle !== '' ? windowTitle : undefined,
+      title: windowTitle,
     };
     window.electron.ipcRenderer.sendMessage('save-config', [newConfig]);
     refresh();

@@ -14,7 +14,12 @@ const ResultList: React.FC<IProps> = ({ data }) => {
     return <ResultItem data={item} />;
   };
   return (
-    <Box display="flex" flexDirection="column" alignContent="center">
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignContent="center"
+      width="100%"
+    >
       <Typography align="center" color="#7a7b78">
         共找到 <b>{total}</b> 份结果
       </Typography>
