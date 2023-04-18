@@ -52,6 +52,12 @@ export function getConfig(): IConfig {
 
   const configPath = readFileSync(cfgPath, 'utf-8');
 
+  if (!existsSync(configPath)) {
+    // 修复删除配置后崩溃bug
+    rmSync(cfgPath);
+    return getConfig();
+  }
+
   return JSON.parse(readFileSync(configPath, 'utf-8'));
 }
 

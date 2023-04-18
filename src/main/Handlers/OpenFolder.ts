@@ -11,7 +11,7 @@ async function openFolderHandler(_event: IpcMainInvokeEvent, _args: any) {
   const surveysPath = path.join(config.workFolder, 'surveys');
   if (!existsSync(surveysPath)) {
     mkdirSync(surveysPath);
-    return null;
+    return [];
   }
 
   const files = readdirSync(surveysPath);

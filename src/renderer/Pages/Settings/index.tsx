@@ -64,6 +64,7 @@ const SettingsPage = () => {
       newConfig,
       `${workFolder}/config.json`,
     ]);
+    window.localStorage.setItem('configCache', JSON.stringify(newConfig));
     refresh();
     saved();
     enqueueSnackbar('设置保存成功', { variant: 'success' });
