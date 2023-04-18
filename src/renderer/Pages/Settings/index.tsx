@@ -60,7 +60,10 @@ const SettingsPage = () => {
       userName,
       title: windowTitle,
     };
-    window.electron.ipcRenderer.sendMessage('save-config', [newConfig]);
+    window.electron.ipcRenderer.sendMessage('save-config', [
+      newConfig,
+      `${workFolder}/config.json`,
+    ]);
     refresh();
     saved();
     enqueueSnackbar('设置保存成功', { variant: 'success' });

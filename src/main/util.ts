@@ -34,16 +34,23 @@ export function getNameFromPath(filePath: string) {
 }
 
 export function getConfig(): IConfig {
-  const workFolderPath = path.join(process.cwd(), 'workspace');
-  if (!existsSync(workFolderPath)) fs.mkdirSync(workFolderPath);
-  const configPath = path.join(workFolderPath, 'config.json');
-  const defaultConfig = {
-    offlineMode: true,
-    workFolder: workFolderPath,
-    needPassword: false,
-  };
-  if (!existsSync(configPath))
-    writeFileSync(configPath, JSON.stringify(defaultConfig));
+  const cfgPath = path.join(process.cwd(), 'config'); // 专门用于存储workfolder在哪里的配置文件，里面是config.json的路径
+
+  if (!existsSync(cfgPath)) {
+    const workFolderPath = path.join(process.cwd(), 'workspace');
+    if (!existsSync(workFolderPath)) fs.mkdirSync(workFolderPath);
+    const configPath = path.join(workFolderPath, 'config.json');
+    const defaultConfig = {
+      offlineMode: true,
+      workFolder: workFolderPath,
+      needPassword: false,
+    };
+    if (!existsSync(configPath))
+      writeFileSync(configPath, JSON.stringify(defaultConfig));
+    writeFileSync(cfgPath, configPath);
+  }
+
+  const configPath = readFileSync(cfgPath, 'utf-8');
 
   return JSON.parse(readFileSync(configPath, 'utf-8'));
 }

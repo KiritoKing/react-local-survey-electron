@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { getConfig } from '../util';
 import { ipcHanlder } from '../typing';
 
