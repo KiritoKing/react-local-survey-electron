@@ -175,7 +175,7 @@
     "webpack-merge": "^5.8.0"
   },
   "build": {
-    "productName": "local-survey-system",
+    "productName": "Local Survey System",
     "appId": "org.Github.KiritoKing",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
