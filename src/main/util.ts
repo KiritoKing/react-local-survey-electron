@@ -34,7 +34,7 @@ export function getNameFromPath(filePath: string) {
 }
 
 export function getConfig(): IConfig {
-  const cfgPath = path.join(process.cwd(), 'config'); // 专门用于存储workfolder在哪里的配置文件，里面是config.json的路径
+  const cfgPath = path.join(process.cwd(), 'path.cfg'); // 专门用于存储workfolder在哪里的配置文件，里面是config.json的路径
 
   if (!existsSync(cfgPath)) {
     const workFolderPath = path.join(process.cwd(), 'workspace');
